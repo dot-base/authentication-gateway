@@ -1,0 +1,66 @@
+{
+  "name": "authentication-gateway",
+  "description": "Traefik forward auth implementation to validate jwt tokens.",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": ">=16 <17"
+  },
+  "scripts": {
+    "start": "nodemon --watch 'src/**/*' -e ts --exec 'npm run watch'",
+    "watch": "npm run lint && npm run prettier && npm run development",
+    "lint": "eslint 'src/**' --ext .ts --fix",
+    "lint-without-fix": "eslint 'src/**' --ext .ts",
+    "test": "jest --passWithNoTests",
+    "prettier": "prettier --write 'src/**/*'",
+    "development": "NODE_ENV=development node --inspect=9229 -r tsconfig-paths/register -r ts-node/register src/server.ts",
+    "build": "tsc",
+    "production": "node -r tsconfig-paths/register build/server.js"
+  },
+  "dependencies": {
+    "@sentry/node": "^5.29.0",
+    "@sentry/tracing": "^5.29.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.5",
+    "tsconfig-paths": "^3.9.0",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.7",
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/node-fetch": "^2.5.12",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
+    "@typescript-eslint/parser": "^4.9.1",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.4.1",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "prettier",
+      "prettier/@typescript-eslint"
+    ],
+    "env": {
+      "es6": true,
+      "node": true
+    }
+  },
+  "prettier": {
+    "printWidth": 100
+  }
+}
