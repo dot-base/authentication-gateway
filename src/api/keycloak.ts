@@ -8,7 +8,8 @@ export default class KeycloakApi {
   }
 
   private static get clientSecret(): string {
-    if (!process.env.KEYCLOAK_CLIENT_SECRET) throw new Error("Keycloak client secret is not defined.");
+    if (!process.env.KEYCLOAK_CLIENT_SECRET)
+      throw new Error("Keycloak client secret is not defined.");
     return process.env.KEYCLOAK_CLIENT_SECRET;
   }
 
