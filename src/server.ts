@@ -4,6 +4,7 @@ import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 
 import LoginRouter from "@/routers/Login";
+import ValidationRouter from "@/routers/Validation";
 
 class Server {
   private static get port(): string {
@@ -29,6 +30,7 @@ class Server {
     app.use(cookieParser());
 
     app.use("/api/auth/login", LoginRouter);
+    app.use("/api/auth/validate", ValidationRouter);
 
     app.listen(Server.port, () => {
       console.log(`Server listening on ${Server.port}`);
