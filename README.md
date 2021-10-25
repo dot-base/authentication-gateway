@@ -1,5 +1,5 @@
 # Authentication Gateway
-Traefik forward auth implementation to manage user authentication and registration using session cookies.
+Authentication Gateway for dot-base to manage user authentication and registration using session cookies.
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/dot-base/authentication-gateway)](https://github.com/dot-base/authentication-gateway/releases)
 [![Docker Build Status](https://img.shields.io/badge/We%20love-Docker-blue?style=flat&logo=Docker)](https://github.com/orgs/dot-base/packages)
@@ -42,6 +42,7 @@ Want a authentication gateway of your own? The easiest way is to deploy our dock
 | KEYCLOAK_REALM_NAME | - | dotbase |
 | KEYCLOAK_CLIENT_ID | - | authentication-gateway |
 | KEYCLOAK_CLIENT_SECRET | - | - |
+| KEYCLOAK_REALM_URL | http://keycloak:8080/auth/realms/dotbase | - |
 
 ### Encryption
 Used to encrypt the token cookie before sending it to the client
