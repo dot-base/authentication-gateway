@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 
-import AuthenticationRouter from "@/routers/Authentication";
+import LoginRouter from "@/routers/Login";
 
 class Server {
   private static get port(): string {
@@ -15,6 +15,32 @@ class Server {
 
   constructor() {
     this.startApiServer();
+  }
+
+  private async startApiServer() {
+    Server.validateEnvironmentVariables();
+
+    const app = express();
+
+    Server.enableSentry(app);
+
+    app.use(express.urlencoded({ extended: true }));
+
+    app.use("/api/auth/login", LoginRouter);
+
+    app.listen(Server.port, () => {
+      console.log(`Server listening on ${Server.port}`);
+    });
+  }
+
+  private static validateEnvironmentVariables() {
+    const requiredEnvVariables = ["AES_PASSPHRASE", "CLIENT_ID", "CLIENT_SECRET"];
+    for (const envVariable of requiredEnvVariables) {
+      if (!process.env[envVariable])
+        throw new Error(
+          `Environment variable ${envVariable} is unset, but required for the service to work.`
+        );
+    }
   }
 
   private static enableSentry(app: Express) {
@@ -32,18 +58,6 @@ class Server {
     app.use(Sentry.Handlers.requestHandler());
     app.use(Sentry.Handlers.tracingHandler());
     app.use(Sentry.Handlers.errorHandler());
-  }
-
-  private async startApiServer() {
-    const app = express();
-
-    Server.enableSentry(app);
-
-    app.use("/", AuthenticationRouter);
-
-    app.listen(Server.port, () => {
-      console.log(`Server listening on ${Server.port}`);
-    });
   }
 }
 

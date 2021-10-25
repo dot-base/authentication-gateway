@@ -1,12 +1,22 @@
-import express, { Request } from "express";
-import Service from "@/services/Login";
+import express from "express";
+import LoginService from "@/services/Login";
 
 const router: express.Router = express.Router();
 
-router.use("/", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    validate(req);
-    await Service.login(req);
+    if (!req.body.username) throw new Error("Request body is missing an username.");
+    if (!req.body.password) throw new Error("Request body is missing a password.");
+
+    const sessionCookie = await LoginService.createSessionCookie(
+      req.body.username,
+      req.body.password
+    );
+
+    res.cookie("session", sessionCookie, {
+      expires: new Date(Date.now() + 900000),
+      httpOnly: true,
+    });
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,10 +25,5 @@ router.use("/", async (req, res) => {
     return;
   }
 });
-
-function validate(req: Request) {
-  if (!req.body.username) throw new Error("Request body is missing an username.");
-  if (!req.body.password) throw new Error("Request body is missing a password.");
-}
 
 export default router;
