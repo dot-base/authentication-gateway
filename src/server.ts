@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import cookieParser from "cookie-parser";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 
@@ -25,6 +26,7 @@ class Server {
     Server.enableSentry(app);
 
     app.use(express.json());
+    app.use(cookieParser());
 
     app.use("/api/auth/login", LoginRouter);
 
