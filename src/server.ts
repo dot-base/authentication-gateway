@@ -34,7 +34,7 @@ class Server {
   }
 
   private static validateEnvironmentVariables() {
-    const requiredEnvVariables = ["AES_PASSPHRASE", "CLIENT_ID", "CLIENT_SECRET"];
+    const requiredEnvVariables = ["AES_PASSPHRASE", "KEYCLOAK_CLIENT_ID", "KEYCLOAK_CLIENT_SECRET"];
     for (const envVariable of requiredEnvVariables) {
       if (!process.env[envVariable])
         throw new Error(

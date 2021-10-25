@@ -5,6 +5,12 @@ Traefik forward auth implementation to manage user authentication and registrati
 [![Docker Build Status](https://img.shields.io/badge/We%20love-Docker-blue?style=flat&logo=Docker)](https://github.com/orgs/dot-base/packages)
 
 
+## Quick Nav
+1. [Usage](#Usage)
+1. [Configuration](#Configuration)
+1. [Contributing](#Contributing)
+
+
 ## Usage
 
 Want a Traefik JWT Auth of your own? The easiest way is to deploy our docker container. Just follow the steps below to get started.
@@ -27,12 +33,16 @@ Want a Traefik JWT Auth of your own? The easiest way is to deploy our docker con
 
 ## Configuration
 
-### Environment Variables
+### Identity Provider Connection
+| Variable Name | Default | Example |
+| --- | --- | --- |
+| KEYCLOAK_CLIENT_ID | - | authentication-gateway |
+| KEYCLOAK_CLIENT_SECRET | - | - |
 
-| Variable Name | Default |
-| --- | --- |
-| KEYCLOAK_REALM_URL | http://keycloak:8080/auth/realms/dotbase |
-| git diff | Show file differences that haven't been staged |
+### Encryption
+| Variable Name | Default | Example |
+| --- | --- | --- |
+| AES_PASSPHRASE | - | - |
 
 
 ## Contributing

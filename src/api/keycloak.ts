@@ -3,13 +3,13 @@ import fetch, { HeaderInit, BodyInit } from "node-fetch";
 
 export default class KeycloakApi {
   private static get clientId(): string {
-    if (!process.env.CLIENT_ID) throw new Error("Client ID is not defined.");
-    return process.env.CLIENT_ID;
+    if (!process.env.KEYCLOAK_CLIENT_ID) throw new Error("Keycloak client ID is not defined.");
+    return process.env.KEYCLOAK_CLIENT_ID;
   }
 
   private static get clientSecret(): string {
-    if (!process.env.CLIENT_SECRET) throw new Error("Client secret is not defined.");
-    return process.env.CLIENT_SECRET;
+    if (!process.env.KEYCLOAK_CLIENT_SECRET) throw new Error("Keycloak client secret is not defined.");
+    return process.env.KEYCLOAK_CLIENT_SECRET;
   }
 
   private static get baseUrl(): string {
