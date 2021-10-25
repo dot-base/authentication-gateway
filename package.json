@@ -20,6 +20,7 @@
   "dependencies": {
     "@sentry/node": "^5.29.0",
     "@sentry/tracing": "^5.29.0",
+    "cookie-parser": "^1.4.5",
     "crypto-js": "^4.1.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
@@ -28,6 +29,7 @@
     "tslib": "^2.3.1"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "@types/crypto-js": "^4.0.2",
     "@types/express": "^4.17.7",
     "@types/jsonwebtoken": "^8.5.5",
