@@ -1,5 +1,5 @@
 import express from "express";
-import LoginService from "@/services/Login";
+import CookieService from "@/services/Cookie";
 
 const router: express.Router = express.Router();
 
@@ -8,7 +8,7 @@ router.post("/", async (req, res) => {
     if (!req.body.username) throw new Error("Request body is missing an username.");
     if (!req.body.password) throw new Error("Request body is missing a password.");
 
-    const sessionCookie = await LoginService.createSessionCookie(
+    const sessionCookie = await CookieService.createSessionCookie(
       req.body.username,
       req.body.password
     );
