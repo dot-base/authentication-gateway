@@ -45,4 +45,20 @@ export default class KeycloakApi {
 
     return response.json();
   }
+
+  public static async refresh(refreshToken: string): Promise<Tokens> {
+    const loginParams = new URLSearchParams();
+    loginParams.append("client_id", this.clientId);
+    loginParams.append("client_secret", this.clientSecret);
+    loginParams.append("grant_type", "refresh_token");
+    loginParams.append("refresh_token", refreshToken);
+
+    const response = await fetch(`${this.baseUrl}/protocol/openid-connect/token`, {
+      method: "POST",
+      body: loginParams as unknown as BodyInit,
+    });
+    if (!response.ok) throw new Error("Unable to login.");
+
+    return response.json();
+  }
 }
