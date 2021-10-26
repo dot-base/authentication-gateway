@@ -13,20 +13,22 @@ Traefik forward auth implementation to manage user authentication and registrati
 
 ## Usage
 
-Want a Traefik JWT Auth of your own? The easiest way is to deploy our docker container. Just follow the steps below to get started.
-
+Want a authentication gateway of your own? The easiest way is to deploy our docker container. Just follow the steps below to get started.
 
 ### Requirements
 - [Docker Engine >= v1.13](https://www.docker.com/get-started)
 
 ### Deployment
-1. [optional] Set environment variables to configure the container:
+1. Set environment variables to configure the container:
     ```sh
-    export KEYCLOAK_REALM_URL=http://keycloak:8080/auth/realms/dotbase
+    export KEYCLOAK_REALM_NAME="dotbase"
+    export KEYCLOAK_CLIENT_ID="YOUR-CLIENT-ID"
+    export KEYCLOAK_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+    export COOKIE_ENCRYPTION_PASSPHRASE_AES="YOUR-SECRET-TO-ENCRYPT-THE-SESSION-COOKIE"
     ```
 1. Start the container
     ```
-    docker run --name authentication-gateway -p 3000:3000 -d ghcr.io/dot-base/authentication-gateway:latest
+    docker run --name authentication-gateway -e KEYCLOAK_REALM_NAME -e KEYCLOAK_CLIENT_ID -e KEYCLOAK_CLIENT_SECRET -e COOKIE_ENCRYPTION_PASSPHRASE_AES -p 3000:3000 -d ghcr.io/dot-base/authentication-gateway:latest
     ```
 1. Done and dusted 🎉. The Server is available on port 3000.
 
@@ -36,13 +38,16 @@ Want a Traefik JWT Auth of your own? The easiest way is to deploy our docker con
 ### Identity Provider Connection
 | Variable Name | Default | Example |
 | --- | --- | --- |
+| KEYCLOAK_SERVER_ADDRESS | http://keycloak:8080 | - |
+| KEYCLOAK_REALM_NAME | - | dotbase |
 | KEYCLOAK_CLIENT_ID | - | authentication-gateway |
 | KEYCLOAK_CLIENT_SECRET | - | - |
 
 ### Encryption
+Used to encrypt the token cookie before sending it to the client
 | Variable Name | Default | Example |
 | --- | --- | --- |
-| AES_PASSPHRASE | - | - |
+| COOKIE_ENCRYPTION_PASSPHRASE_AES | - | - |
 
 
 ## Contributing
@@ -54,13 +59,26 @@ This project is written in Typescript. For an introduction into the language and
 - A local copy of this repository
 
 ### Running Locally
+1. Set up a keycloak instance:
+    1. Start a keycloak server
+        ```sh
+        docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:15.0.2
+        ```
+    1. Create a new realm
+    1. Create a new client
+        1. Set the client "Access Type" to "confidential"
+        1. Set the "Valid Redirect URIs" to "http://127.0.0.1:8080/"
+    1. Create user with password
 1. Install all dependencies
     ```
     npm install
     ```
-1. Set the environment variables:
-    ```
-    export KEYCLOAK_REALM_URL=http://127.0.0.1:8080/auth/realms/dotbase
+1. Set environment variables to configure the application:
+    ```sh
+    export KEYCLOAK_REALM_NAME="dotbase"
+    export KEYCLOAK_CLIENT_ID="YOUR-CLIENT-ID"
+    export KEYCLOAK_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+    export COOKIE_ENCRYPTION_PASSPHRASE_AES="YOUR-SECRET-TO-ENCRYPT-THE-SESSION-COOKIE"
     ```
 1. Start the development server
     ```
