@@ -5,6 +5,7 @@ import * as Tracing from "@sentry/tracing";
 
 import LoginRouter from "@/routers/Login";
 import ValidationRouter from "@/routers/Validation";
+import RenewalRouter from "@/routers/Renewal";
 
 class Server {
   private static get port(): string {
@@ -31,6 +32,7 @@ class Server {
 
     app.use("/api/auth/login", LoginRouter);
     app.use("/api/auth/validate", ValidationRouter);
+    app.use("/api/auth/renew", RenewalRouter);
 
     app.listen(Server.port, () => {
       console.log(`Server listening on ${Server.port}`);
