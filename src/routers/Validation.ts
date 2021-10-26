@@ -1,5 +1,5 @@
 import express from "express";
-import ValidationService from "@/services/Validation";
+import CookieService from "@/services/Cookie";
 
 const router: express.Router = express.Router();
 
@@ -7,7 +7,7 @@ router.use("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    await ValidationService.validate(req.cookies.session);
+    await CookieService.validateSessionCookie(req.cookies.session);
 
     res.status(200).send();
 
