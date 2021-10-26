@@ -11,11 +11,8 @@ export default class CookieService {
 
   public static async renewSessionCookie(sessionCookie: string): Promise<string> {
     const tokens = CryptoService.decrypt(sessionCookie);
-    for (const certificate of CertificateModel.certificates) {
-      const tokenIsValid = await JwtUtil.isValid(tokens.refresh_token, certificate);
-      if (!tokenIsValid) throw new Error("Access token is invalid.");
-    }
-    return "test";
+    const newTokens = await KeycloakApi.refresh(tokens.refresh_token);
+    return CryptoService.encrypt(newTokens);
   }
 
   public static async validateSessionCookie(sessionCookie: string): Promise<void> {
