@@ -7,8 +7,12 @@ router.use("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    await CookieService.validateSessionCookie(req.cookies.session);
+    const sessionCookie = await CookieService.renewSessionCookie(req.cookies.session);
 
+    res.cookie("session", sessionCookie, {
+      expires: new Date(Date.now() + 900000),
+      httpOnly: true,
+    });
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
