@@ -9,6 +9,15 @@ export default class CookieService {
     return CryptoService.encrypt(tokens);
   }
 
+  public static async renewSessionCookie(sessionCookie: string): Promise<string> {
+    const tokens = CryptoService.decrypt(sessionCookie);
+    for (const certificate of CertificateModel.certificates) {
+      const tokenIsValid = await JwtUtil.isValid(tokens.refresh_token, certificate);
+      if (!tokenIsValid) throw new Error("Access token is invalid.");
+    }
+    return "test";
+  }
+
   public static async validateSessionCookie(sessionCookie: string): Promise<void> {
     const tokens = CryptoService.decrypt(sessionCookie);
 
