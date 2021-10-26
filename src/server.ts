@@ -24,7 +24,7 @@ class Server {
 
     Server.enableSentry(app);
 
-    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
 
     app.use("/api/auth/login", LoginRouter);
 
@@ -34,7 +34,12 @@ class Server {
   }
 
   private static validateEnvironmentVariables() {
-    const requiredEnvVariables = ["AES_PASSPHRASE", "KEYCLOAK_CLIENT_ID", "KEYCLOAK_CLIENT_SECRET"];
+    const requiredEnvVariables = [
+      "COOKIE_ENCRYPTION_PASSPHRASE_AES",
+      "KEYCLOAK_REALM_NAME",
+      "KEYCLOAK_CLIENT_ID",
+      "KEYCLOAK_CLIENT_SECRET",
+    ];
     for (const envVariable of requiredEnvVariables) {
       if (!process.env[envVariable])
         throw new Error(

@@ -1,7 +1,16 @@
 import Tokens from "@/types/Tokens";
-import fetch, { HeaderInit, BodyInit } from "node-fetch";
+import fetch, { BodyInit } from "node-fetch";
 
 export default class KeycloakApi {
+  private static get serverAddress(): string {
+    return process.env.KEYCLOAK_SERVER_ADDRESS ?? "http://keycloak:8080";
+  }
+
+  private static get realmName(): string {
+    if (!process.env.KEYCLOAK_REALM_NAME) throw new Error("Keycloak realm name is not defined.");
+    return process.env.KEYCLOAK_REALM_NAME;
+  }
+
   private static get clientId(): string {
     if (!process.env.KEYCLOAK_CLIENT_ID) throw new Error("Keycloak client ID is not defined.");
     return process.env.KEYCLOAK_CLIENT_ID;
@@ -15,15 +24,9 @@ export default class KeycloakApi {
 
   private static get baseUrl(): string {
     const hostname =
-      process.env.NODE_ENV === "development"
-        ? "http://127.0.0.1:8080"
-        : process.env.KEYCLOAK_SERVER_ADDRESS ?? "http://keycloak:8080";
+      process.env.NODE_ENV === "development" ? "http://127.0.0.1:8080" : this.serverAddress;
 
-    return new URL("/auth/realms/dotbase", hostname).toString();
-  }
-
-  private static get headers(): HeaderInit {
-    return {};
+    return new URL(`/auth/realms/${this.realmName}`, hostname).toString();
   }
 
   public static async login(username: string, password: string): Promise<Tokens> {
