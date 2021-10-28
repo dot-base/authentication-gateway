@@ -15,13 +15,11 @@ export default class KeycloakApi {
   } 
 
   public static async login(username: string, password: string): Promise<Tokens> {
-    console.log('Called mocked keycloak login ednpoint.');
     if (username !== "test" || password !== "test") throw new Error("Unable to login.");
     return this.tokens;
   }
 
   public static async refresh(refreshToken: string): Promise<Tokens> {
-    console.log('Called mocked keycloak refresh ednpoint.');
     if (refreshToken !== "test") throw new Error("Unable to login.");
     return this.tokens;
   }
