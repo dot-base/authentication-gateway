@@ -1,57 +1,16 @@
 import express, { Express } from "express";
-import cookieParser from "cookie-parser";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 
-import LoginRouter from "@/routers/Login";
-import ValidationRouter from "@/routers/Validation";
-import RenewalRouter from "@/routers/Renewal";
+import router from '@/router';
 
-class Server {
+export default class Server {
   private static get port(): string {
     return process.env.PORT || "3000";
   }
 
   private static get sentryIsEnabled(): boolean {
     return !!process.env.SENTRY_DSN && !!process.env.SENTRY_ENVIRONMENT;
-  }
-
-  constructor() {
-    this.startApiServer();
-  }
-
-  private async startApiServer() {
-    Server.validateEnvironmentVariables();
-
-    const app = express();
-
-    Server.enableSentry(app);
-
-    app.use(express.json());
-    app.use(cookieParser());
-
-    app.use("/api/auth/login", LoginRouter);
-    app.use("/api/auth/validate", ValidationRouter);
-    app.use("/api/auth/renew", RenewalRouter);
-
-    app.listen(Server.port, () => {
-      console.log(`Server listening on ${Server.port}`);
-    });
-  }
-
-  private static validateEnvironmentVariables() {
-    const requiredEnvVariables = [
-      "COOKIE_ENCRYPTION_PASSPHRASE_AES",
-      "KEYCLOAK_REALM_NAME",
-      "KEYCLOAK_CLIENT_ID",
-      "KEYCLOAK_CLIENT_SECRET",
-    ];
-    for (const envVariable of requiredEnvVariables) {
-      if (!process.env[envVariable])
-        throw new Error(
-          `Environment variable ${envVariable} is unset, but required for the service to work.`
-        );
-    }
   }
 
   private static enableSentry(app: Express) {
@@ -69,6 +28,35 @@ class Server {
     app.use(Sentry.Handlers.requestHandler());
     app.use(Sentry.Handlers.tracingHandler());
     app.use(Sentry.Handlers.errorHandler());
+  }
+
+  private static validateEnvironmentVariables() {
+    const requiredEnvVariables = [
+      "COOKIE_ENCRYPTION_PASSPHRASE_AES",
+      "KEYCLOAK_REALM_NAME",
+      "KEYCLOAK_CLIENT_ID",
+      "KEYCLOAK_CLIENT_SECRET",
+    ];
+    for (const envVariable of requiredEnvVariables) {
+      if (!process.env[envVariable])
+        throw new Error(
+          `Environment variable ${envVariable} is unset, but required for the service to work.`
+        );
+    }
+  }
+
+  constructor() {
+    this.startApiServer();
+  }
+
+  private async startApiServer() {
+    Server.validateEnvironmentVariables();
+
+    Server.enableSentry(router);
+
+    router.listen(Server.port, () => {
+      console.log(`Server listening on ${Server.port}`);
+    });
   }
 }
 
