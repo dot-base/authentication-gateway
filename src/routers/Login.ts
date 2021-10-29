@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
       req.body.username,
       req.body.password
     );
-  
+
     res.cookie("session", sessionCookie, {
       expires: new Date(Date.now() + 900000),
       httpOnly: true,

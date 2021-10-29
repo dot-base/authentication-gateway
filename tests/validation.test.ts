@@ -2,29 +2,33 @@ import { BeforeAll, Describe, Test } from "jest-decorator";
 import request from "supertest";
 
 import router from "@/router";
+import LoginTestGroup from "./login.test";
 
 jest.mock('@/api/keycloak');
 
-@Describe('Login endpoint')
-export default class LoginTestGroup {
+@Describe('Validation endpoint')
+class ValidationTestGroup {
 
-  public static get validLoginRequest(): request.Test {
-    return request(router)
-      .post("/api/auth/login")
-      .send({username: 'test', password: 'test'})
-      .set('Accept', 'application/json')
-  }
+  public cookie = "";
   
   @BeforeAll
-  public beforeAll() {
+  public async beforeAll() {
     process.env.COOKIE_ENCRYPTION_PASSPHRASE_AES = "some_passphrase"
+    await LoginTestGroup.validLoginRequest.then((res) => {
+      const cookies = res.headers['set-cookie'][0].split(',').map((item: string) => item.split(';')[0]);
+      this.cookie = cookies.join(';');
+    });
+
   }
 
   @Test("should return HTTP 200 and a session cookie on valid login credentials")
   public async testValidLoginCredentials() {
-    await LoginTestGroup.validLoginRequest
+    console.log(`cookie: ${this.cookie}`)
+    
+    await request(router)
+      .post("/api/auth/validate")
+      .set('Cookie', this.cookie)
       .expect(200)
-      .expect('set-cookie', /.*session=.*/)
   }
 
   @Test("should return HTTP 403 on invalid login credentials")
@@ -33,13 +37,6 @@ export default class LoginTestGroup {
       .post("/api/auth/login")
       .send({username: 'test', password: 'toast'})
       .set('Accept', 'application/json')
-      .expect(403)
-  }
-
-  @Test("should return HTTP 403 on missing login credentials")
-  public async testMissingLoginCredentials() {
-    await request(router)
-      .post("/api/auth/login")
       .expect(403)
   }
 
