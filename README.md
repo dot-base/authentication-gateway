@@ -1,5 +1,5 @@
 # Authentication Gateway
-Traefik forward auth implementation to manage user authentication and registration using session cookies.
+Authentication Gateway for dot-base to manage user authentication and registration using session cookies.
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/dot-base/authentication-gateway)](https://github.com/dot-base/authentication-gateway/releases)
 [![Docker Build Status](https://img.shields.io/badge/We%20love-Docker-blue?style=flat&logo=Docker)](https://github.com/orgs/dot-base/packages)
