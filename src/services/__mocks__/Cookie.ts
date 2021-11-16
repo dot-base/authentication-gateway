@@ -16,6 +16,7 @@ export default class CookieService {
 
   public static async validateSessionCookie(sessionCookie: string): Promise<void> {
     const tokens = CryptoService.decrypt(sessionCookie);
-    if (tokens.access_token !== KeycloakApi.tokens.access_token) throw new Error("Access token is invalid.");
+    if (tokens.access_token !== KeycloakApi.tokens.access_token)
+      throw new Error("Access token is invalid.");
   }
 }
