@@ -5,38 +5,40 @@ import router from "@/router";
 import LoginTestGroup from "./login.test";
 
 jest.mock('@/api/keycloak');
+jest.mock('@/services/Cookie');
 
 @Describe('Validation endpoint')
 class ValidationTestGroup {
-
-  public cookie = "";
   
   @BeforeAll
   public async beforeAll() {
     process.env.COOKIE_ENCRYPTION_PASSPHRASE_AES = "some_passphrase"
-    await LoginTestGroup.validLoginRequest.then((res) => {
-      const cookies = res.headers['set-cookie'][0].split(',').map((item: string) => item.split(';')[0]);
-      this.cookie = cookies.join(';');
-    });
-
   }
 
-  @Test("should return HTTP 200 and a session cookie on valid login credentials")
-  public async testValidLoginCredentials() {
-    console.log(`cookie: ${this.cookie}`)
-    
+  @Test("should respond with HTTP status 200 if a valid session cookie is submitted")
+  public async testValidSessionCookie() {
+    const loginResponse = await LoginTestGroup.validLoginRequest;
+    const cookies = loginResponse.headers['set-cookie'][0].split(',').map((item: string) => item.split(';')[0]);
+    const cookie = cookies.join(';');
+
     await request(router)
       .post("/api/auth/validate")
-      .set('Cookie', this.cookie)
+      .set('Cookie', cookie)
       .expect(200)
   }
 
-  @Test("should return HTTP 403 on invalid login credentials")
-  public async testInvalidLoginCredentials() {
+  @Test("should respond with HTTP status 403 if an invalid session cookie is submitted")
+  public async testInvalidSessionCookie() {
     await request(router)
-      .post("/api/auth/login")
-      .send({username: 'test', password: 'toast'})
-      .set('Accept', 'application/json')
+      .post("/api/auth/validate")
+      .set('Cookie', 'some-invalid-cookie-value')
+      .expect(403)
+  }
+
+  @Test("should respond with HTTP status 403 if the session cookie is missing")
+  public async testMissingSessionCookie() {
+    await request(router)
+      .post("/api/auth/validate")
       .expect(403)
   }
 

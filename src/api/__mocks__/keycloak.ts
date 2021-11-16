@@ -1,7 +1,7 @@
 import Tokens from "@/types/Tokens";
 
 export default class KeycloakApi {
-  private static get tokens(): Tokens {
+  public static get tokens(): Tokens {
     return {
       access_token:
         "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJSWDY2d2E5V1NTdld6SVcyWXVsZmdUTXlpaV9LZlhndU5uYzVmbWFna29JIn0.eyJleHAiOjE2MzMzNTI1MzIsImlhdCI6MTYzMzM1MjIzMiwianRpIjoiNGRlOTZhYTUtOGJiYi00YjZmLTgwMDAtNWFkMzMwMjZhN2ZmIiwiaXNzIjoiaHR0cDovLzEyNy4wLjAuMTo4MDgwL2F1dGgvcmVhbG1zL2RvdGJhc2UiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiN2VhYzI2OGMtNGJhMC00NjJhLThlMDQtYTY5NWE2ZTAzN2E3IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoibWVkaWNhbC1kYXNoYm9hcmQiLCJzZXNzaW9uX3N0YXRlIjoiNTJkZGQxZGYtOWUzMy00NWQ0LWJjYzAtNmQ0ZmE1NDIwOTc2IiwiYWNyIjoiMSIsInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6InRlc3QifQ.G7O8WV4tU_UD1bFS3-sQE40pmgEZlHWYUASGfkJYUBB_E0CN7kzMTDAwfjJaQfWkydtdTb2LAc4N-u9UHBk2WlUdft9GdYsSvFSIIrf5xcH6yjXdMc8usVLUMvBH6SIwLsZ5gNULT7yrqOk3GLXu3k1k6vyBJfKp4QL8XCb0BajGwRmlWGhfQO8ryA7qyPeUskdSlPGa83gt-pgMsiqZUrRa1NVUWIoVEuazW9rLDa744wOXY6s_i-7hqsqRhmKVGdALGzx8-XSIvrobdnK9sLNfNYrIoW9Xr4euTIUZzLZQYj401yL-AgNy9hjtu9Cw_aN-B-FU74voSon07v9scA",
@@ -22,7 +22,7 @@ export default class KeycloakApi {
   }
 
   public static async refresh(refreshToken: string): Promise<Tokens> {
-    if (refreshToken !== "test") throw new Error("Unable to login.");
+    if (refreshToken !== KeycloakApi.tokens.refresh_token) throw new Error("Unable to login.");
     return this.tokens;
   }
 }
