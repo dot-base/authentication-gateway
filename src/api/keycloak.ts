@@ -1,5 +1,7 @@
-import Tokens from "@/types/Tokens";
 import fetch, { BodyInit } from "node-fetch";
+
+import KeycloakCerts from "@/types/KeycloakCerts";
+import Tokens from "@/types/Tokens";
 
 export default class KeycloakApi {
   private static get serverAddress(): string {
@@ -60,5 +62,17 @@ export default class KeycloakApi {
     if (!response.ok) throw new Error("Unable to login.");
 
     return response.json();
+  }
+
+  public static async certificates(): Promise<string[]> {
+    const response = await fetch(`${this.baseUrl}/protocol/openid-connect/certs`);
+
+    if (!response.ok)
+      throw new Error(
+        `Unable to fetch certificates from keycloak server. Server responded with HTTP ${response.status}.`
+      );
+
+    const certsJson = (await response.json()) as KeycloakCerts;
+    return certsJson.keys.flatMap((key) => key.x5c);
   }
 }
