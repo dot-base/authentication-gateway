@@ -2,7 +2,7 @@ import { Express } from "express";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 
-import router from "@/router";
+import router from "@/express";
 
 export default class Server {
   private static get port(): string {

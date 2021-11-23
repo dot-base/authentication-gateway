@@ -1,7 +1,7 @@
 import { BeforeAll, Describe, Test } from "jest-decorator";
 import request from "supertest";
 
-import router from "@/router";
+import router from "@/express";
 
 jest.mock("@/api/keycloak");
 jest.mock("@/services/Cookie");
