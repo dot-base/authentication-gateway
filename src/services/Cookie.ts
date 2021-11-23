@@ -20,7 +20,8 @@ export default class CookieService {
 
     for (const certificate of CertificateModel.certificates) {
       const tokenIsValid = await JwtUtil.isValid(tokens.access_token, certificate);
-      if (!tokenIsValid) throw new Error("Access token is invalid.");
+      if (tokenIsValid) return;
     }
+    throw new Error("Access token is invalid.");
   }
 }
