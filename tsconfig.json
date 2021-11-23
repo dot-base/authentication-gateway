@@ -14,7 +14,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*", "build/*"]
+      "@/*": ["src/*", "build/*"],
+      "@tests/*": ["tests/*"]
     }
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],

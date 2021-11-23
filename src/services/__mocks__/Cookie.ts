@@ -1,6 +1,6 @@
 import KeycloakApi from "@/api/__mocks__/keycloak";
+import mockTokens from "@tests/__mocks__/tokens";
 import CryptoService from "@/services/Crypto";
-import JwtUtil from "@/utils/Jwt";
 
 export default class CookieService {
   public static async createSessionCookie(username: string, password: string): Promise<string> {
@@ -16,7 +16,7 @@ export default class CookieService {
 
   public static async validateSessionCookie(sessionCookie: string): Promise<void> {
     const tokens = CryptoService.decrypt(sessionCookie);
-    if (tokens.access_token !== KeycloakApi.tokens.access_token)
+    if (tokens.access_token !== mockTokens.access_token)
       throw new Error("Access token is invalid.");
   }
 }
