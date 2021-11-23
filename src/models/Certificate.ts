@@ -1,15 +1,11 @@
 import fetch from "node-fetch";
 
 import KeycloakCerts from "@/types/KeycloakCerts";
+import KeycloakApi from "@/api/keycloak";
 
 class CertificateModel {
-  private static get realmUrl(): string {
-    const urlString = process.env.KEYCLOAK_REALM_URL ?? "http://keycloak:8080/auth/realms/dotbase";
-    return new URL(urlString).toString();
-  }
-
   private static get certsUrl(): string {
-    return new URL(`${this.realmUrl}/protocol/openid-connect/certs`).toString();
+    return new URL(`${KeycloakApi.baseUrl}/protocol/openid-connect/certs`).toString();
   }
 
   private static wrapCertificateInformation(certificate: string): string {

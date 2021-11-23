@@ -22,7 +22,7 @@ export default class KeycloakApi {
     return process.env.KEYCLOAK_CLIENT_SECRET;
   }
 
-  private static get baseUrl(): string {
+  public static get baseUrl(): string {
     const hostname =
       process.env.NODE_ENV === "development" ? "http://127.0.0.1:8080" : this.serverAddress;
 
