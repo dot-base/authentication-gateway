@@ -30,6 +30,10 @@ class CertificateModel {
 
   private async fetchCertificates() {
     const certsResponse = await fetch(CertificateModel.certsUrl);
+    if (certsResponse.status >= 300)
+      throw new Error(
+        `Unable to fetch certificates from keycloak server. Server responded with HTTP ${certsResponse.status}.`
+      );
     const certsJson = (await certsResponse.json()) as KeycloakCerts;
     this.certificates = certsJson.keys.flatMap((key) => key.x5c);
   }
