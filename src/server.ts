@@ -2,7 +2,7 @@ import { Express } from "express";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 
-import router from "@/express";
+import express from "@/express";
 
 export default class Server {
   private static get port(): string {
@@ -52,9 +52,9 @@ export default class Server {
   private async startApiServer() {
     Server.validateEnvironmentVariables();
 
-    Server.enableSentry(router);
+    Server.enableSentry(express);
 
-    router.listen(Server.port, () => {
+    express.listen(Server.port, () => {
       console.log(`Server listening on ${Server.port}`);
     });
   }
