@@ -9,10 +9,10 @@
   "scripts": {
     "start": "nodemon --watch 'src/**/*' -e ts --exec 'npm run watch'",
     "watch": "npm run lint && npm run prettier && npm run development",
-    "lint": "eslint 'src/**' --ext .ts --fix",
-    "lint-without-fix": "eslint 'src/**' --ext .ts",
+    "lint": "eslint 'src/**' 'tests/**' --ext .ts --fix",
+    "lint-without-fix": "eslint 'src/**' 'tests/**' --ext .ts",
     "test": "jest --passWithNoTests",
-    "prettier": "prettier --write 'src/**/*'",
+    "prettier": "prettier --write 'src/**/*' 'tests/**/*'",
     "development": "NODE_ENV=development node --inspect=9229 -r tsconfig-paths/register -r ts-node/register src/server.ts",
     "build": "tsc",
     "production": "node -r tsconfig-paths/register build/server.js"
