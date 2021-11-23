@@ -20,10 +20,7 @@ export default class ValidationTestGroup {
       .send({ username: "test", password: "test" })
       .set("Accept", "application/json");
 
-    const cookies = loginResponse.headers["set-cookie"][0]
-      .split(",")
-      .map((item: string) => item.split(";")[0]);
-    const cookie = cookies.join(";");
+    const cookie = loginResponse.headers["set-cookie"][0];
 
     await request(router).post("/api/auth/validate").set("Cookie", cookie).expect(200);
   }
