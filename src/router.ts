@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
 
 import LoginRouter from "@/routers/Login";

@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import { Express } from "express";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 
