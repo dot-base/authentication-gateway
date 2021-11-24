@@ -1,7 +1,6 @@
-import KeycloakApi from "@/api/keycloak";
+import KeycloakApi from "@/api/__mocks__/keycloak";
+import mockTokens from "@tests/__mocks__/tokens";
 import CryptoService from "@/services/Crypto";
-import CertificateModel from "@/models/Certificate";
-import JwtUtil from "@/utils/Jwt";
 
 export default class CookieService {
   public static async createSessionCookie(username: string, password: string): Promise<string> {
@@ -17,11 +16,7 @@ export default class CookieService {
 
   public static async validateSessionCookie(sessionCookie: string): Promise<void> {
     const tokens = CryptoService.decrypt(sessionCookie);
-
-    for (const certificate of CertificateModel.certificates) {
-      const tokenIsValid = await JwtUtil.isValid(tokens.access_token, certificate);
-      if (tokenIsValid) return;
-    }
-    throw new Error("Access token is invalid.");
+    if (tokens.access_token !== mockTokens.access_token)
+      throw new Error("Access token is invalid.");
   }
 }

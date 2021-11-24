@@ -4,7 +4,7 @@
     "esModuleInterop": true,
     "strict": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "importHelpers": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -14,10 +14,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*", "build/*"]
+      "@/*": ["src/*", "build/*"],
+      "@tests/*": ["tests/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules"],
   "ts-node": {
     "files": true

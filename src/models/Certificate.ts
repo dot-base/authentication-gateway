@@ -1,17 +1,6 @@
-import fetch from "node-fetch";
-
-import KeycloakCerts from "@/types/KeycloakCerts";
+import KeycloakApi from "@/api/keycloak";
 
 class CertificateModel {
-  private static get realmUrl(): string {
-    const urlString = process.env.KEYCLOAK_REALM_URL ?? "http://keycloak:8080/auth/realms/dotbase";
-    return new URL(urlString).toString();
-  }
-
-  private static get certsUrl(): string {
-    return new URL(`${this.realmUrl}/protocol/openid-connect/certs`).toString();
-  }
-
   private static wrapCertificateInformation(certificate: string): string {
     return `-----BEGIN CERTIFICATE-----\n${certificate}\n-----END CERTIFICATE-----`;
   }
@@ -33,9 +22,7 @@ class CertificateModel {
   }
 
   private async fetchCertificates() {
-    const certsResponse = await fetch(CertificateModel.certsUrl);
-    const certsJson = (await certsResponse.json()) as KeycloakCerts;
-    this.certificates = certsJson.keys.flatMap((key) => key.x5c);
+    this.certificates = await KeycloakApi.certificates();
   }
 }
 

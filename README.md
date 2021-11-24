@@ -42,7 +42,6 @@ Want a authentication gateway of your own? The easiest way is to deploy our dock
 | KEYCLOAK_REALM_NAME | - | dotbase |
 | KEYCLOAK_CLIENT_ID | - | authentication-gateway |
 | KEYCLOAK_CLIENT_SECRET | - | - |
-| KEYCLOAK_REALM_URL | http://keycloak:8080/auth/realms/dotbase | - |
 
 ### Encryption
 Used to encrypt the token cookie before sending it to the client
