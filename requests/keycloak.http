@@ -1,0 +1,2 @@
+# get keycloak certificates
+GET http://localhost:8080/auth/realms/dotbase/protocol/openid-connect/certs
