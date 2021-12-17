@@ -72,4 +72,17 @@ export default abstract class KeycloakApi {
     const certsJson = (await response.json()) as KeycloakCerts;
     return certsJson.keys.flatMap((key) => key.x5c);
   }
+
+  public static async setupTOTP(): Promise<string[]> {
+    const response = await fetch(`${this.baseUrl}/setup/totp`);
+
+    //TODO: handle different realms
+
+    if (!response.ok)
+      throw new Error(
+        `Unable to fetch OTP setup from keycloak server. Server responded with HTTP ${response.status}.`
+      );
+
+    return response.json;
+  }
 }
