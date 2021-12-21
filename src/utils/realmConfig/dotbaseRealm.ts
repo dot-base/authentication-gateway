@@ -2,12 +2,14 @@ import RealmConfig from "@/types/RealmConfig";
 
 export default class DotbaseRealmConfig implements RealmConfig {
   public get realmName(): string {
-    if (!process.env.KEYCLOAK_DOTBASE_REALM_NAME) throw new Error("Keycloak realm name is not defined.");
+    if (!process.env.KEYCLOAK_DOTBASE_REALM_NAME)
+      throw new Error("Keycloak realm name is not defined.");
     return process.env.KEYCLOAK_DOTBASE_REALM_NAME;
   }
 
   public get clientId(): string {
-    if (!process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_ID) throw new Error("Keycloak client ID is not defined.");
+    if (!process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_ID)
+      throw new Error("Keycloak client ID is not defined.");
     return process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_ID;
   }
 

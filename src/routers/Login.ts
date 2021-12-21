@@ -7,7 +7,7 @@ router.post("/:realmName", async (req, res) => {
   try {
     if (!req.body.username) throw new Error("Request body is missing an username.");
     if (!req.body.password) throw new Error("Request body is missing a password.");
-    
+
     const sessionCookie = await CookieService.createSessionCookie(
       req.params.realmName,
       req.body.username,
