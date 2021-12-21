@@ -3,10 +3,8 @@ import fetch, { BodyInit } from "node-fetch";
 import KeycloakCerts from "@/types/KeycloakCerts";
 import Tokens from "@/types/Tokens";
 import realmConfig from "@/types/RealmConfig";
-import PatientRealm from "../utils/realmConfig/patientRealm";
-import DotbaseRealm from "../utils/realmConfig/dotbaseRealm";
-import PatientRealmConfig from "../utils/realmConfig/patientRealm";
-import DotbaseRealmConfig from "../utils/realmConfig/dotbaseRealm";
+import PatientRealm from "@/utils/realmConfig/patientRealm";
+import DotbaseRealm from "@/utils/realmConfig/dotbaseRealm";
 
 export default abstract class KeycloakApi {
   private static get serverAddress(): string {
@@ -14,11 +12,11 @@ export default abstract class KeycloakApi {
   }
 
   private static realmConfig(realmName: string): realmConfig {
-    switch(realmName) {
+    switch (realmName) {
       case process.env.KEYCLOAK_PATIENT_REALM_NAME:
-        return new PatientRealmConfig();
+        return new PatientRealm();
       case process.env.KEYCLOAK_DOTBASE_REALM_NAME:
-        return new DotbaseRealmConfig();
+        return new DotbaseRealm();
       default:
         throw new Error("Keycloak realm name is not defined.");
     }
@@ -31,7 +29,11 @@ export default abstract class KeycloakApi {
     return new URL(`/auth/realms`, hostname).toString();
   }
 
-  public static async login(realmName:string, username: string, password: string): Promise<Tokens> {
+  public static async login(
+    realmName: string,
+    username: string,
+    password: string
+  ): Promise<Tokens> {
     const realmConfig = this.realmConfig(realmName);
     const loginParams = new URLSearchParams();
     loginParams.append("client_id", realmConfig.clientId);
@@ -40,16 +42,19 @@ export default abstract class KeycloakApi {
     loginParams.append("username", username);
     loginParams.append("password", password);
 
-    const response = await fetch(`${this.baseUrl}/${realmConfig.realmName}/protocol/openid-connect/token`, {
-      method: "POST",
-      body: loginParams as unknown as BodyInit,
-    });
+    const response = await fetch(
+      `${this.baseUrl}/${realmConfig.realmName}/protocol/openid-connect/token`,
+      {
+        method: "POST",
+        body: loginParams as unknown as BodyInit,
+      }
+    );
     if (!response.ok) throw new Error("Unable to login.");
 
     return response.json();
   }
 
-  public static async refresh(realmName:string, refreshToken: string): Promise<Tokens> {
+  public static async refresh(realmName: string, refreshToken: string): Promise<Tokens> {
     const realmConfig = this.realmConfig(realmName);
     const loginParams = new URLSearchParams();
     loginParams.append("client_id", realmConfig.clientId);
@@ -57,10 +62,13 @@ export default abstract class KeycloakApi {
     loginParams.append("grant_type", "refresh_token");
     loginParams.append("refresh_token", refreshToken);
 
-    const response = await fetch(`${this.baseUrl}/${realmConfig.realmName}/protocol/openid-connect/token`, {
-      method: "POST",
-      body: loginParams as unknown as BodyInit,
-    });
+    const response = await fetch(
+      `${this.baseUrl}/${realmConfig.realmName}/protocol/openid-connect/token`,
+      {
+        method: "POST",
+        body: loginParams as unknown as BodyInit,
+      }
+    );
     if (!response.ok) throw new Error("Unable to login.");
 
     return response.json();
