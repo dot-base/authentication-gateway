@@ -3,12 +3,13 @@ import CookieService from "@/services/Cookie";
 
 const router: express.Router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/:realmName", async (req, res) => {
   try {
     if (!req.body.username) throw new Error("Request body is missing an username.");
     if (!req.body.password) throw new Error("Request body is missing a password.");
-
+    
     const sessionCookie = await CookieService.createSessionCookie(
+      req.params.realmName,
       req.body.username,
       req.body.password
     );

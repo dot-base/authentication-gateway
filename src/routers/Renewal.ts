@@ -3,11 +3,14 @@ import CookieService from "@/services/Cookie";
 
 const router: express.Router = express.Router();
 
-router.use("/", async (req, res) => {
+router.use("/:realmName", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    const sessionCookie = await CookieService.renewSessionCookie(req.cookies.session);
+    const sessionCookie = await CookieService.renewSessionCookie(
+      req.params.realmName,
+      req.cookies.session
+    );
 
     res.cookie("session", sessionCookie, {
       expires: new Date(Date.now() + 900000),
