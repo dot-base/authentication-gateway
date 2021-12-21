@@ -7,8 +7,9 @@ router.use("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    await CookieService.validateSessionCookie(req.cookies.session);
-
+    const realmName = await CookieService.validateSessionCookie(req.cookies.session);
+    
+    res.setHeader("X-Auth-Realm",realmName)
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

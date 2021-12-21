@@ -16,7 +16,7 @@ router.use("/:realmName", async (req, res) => {
       expires: new Date(Date.now() + 900000),
       httpOnly: true,
     });
-    //TODO: set realm header
+    res.setHeader("X-Auth-Realm",req.params.realmName)
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
