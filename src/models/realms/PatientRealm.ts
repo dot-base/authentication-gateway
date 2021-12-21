@@ -1,6 +1,21 @@
+import CertificateModel from "@/models/Certificate";
 import RealmConfig from "@/types/RealmConfig";
 
-export default class PatientRealmConfig implements RealmConfig {
+export default class PatientRealmModel implements RealmConfig {
+  constructor() {
+    this._certificateModel = new CertificateModel();
+    this._certificateModel.fetchCertificates(this.realmName);
+  }
+
+  private static instance: PatientRealmModel;
+
+  public static getInstance(): PatientRealmModel {
+    if (!this.instance) this.instance = new PatientRealmModel();
+    return this.instance;
+  }
+
+  private _certificateModel;
+
   public get realmName(): string {
     if (!process.env.KEYCLOAK_PATIENT_REALM_NAME)
       throw new Error("Keycloak realm name is not defined.");
@@ -17,5 +32,9 @@ export default class PatientRealmConfig implements RealmConfig {
     if (!process.env.KEYCLOAK_PATIENT_REALM_CLIENT_SECRET)
       throw new Error("Keycloak client secret is not defined.");
     return process.env.KEYCLOAK_PATIENT_REALM_CLIENT_SECRET;
+  }
+
+  public certs(): string[] {
+    return this._certificateModel.certificates(this.realmName);
   }
 }

@@ -2,24 +2,11 @@ import fetch, { BodyInit } from "node-fetch";
 
 import KeycloakCerts from "@/types/KeycloakCerts";
 import Tokens from "@/types/Tokens";
-import realmConfig from "@/types/RealmConfig";
-import PatientRealm from "@/utils/realmConfig/patientRealm";
-import DotbaseRealm from "@/utils/realmConfig/dotbaseRealm";
+import RealmsUtil from "@/utils/realms";
 
 export default abstract class KeycloakApi {
   private static get serverAddress(): string {
     return process.env.KEYCLOAK_SERVER_ADDRESS ?? "http://keycloak:8080";
-  }
-
-  private static realmConfig(realmName: string): realmConfig {
-    switch (realmName) {
-      case process.env.KEYCLOAK_PATIENT_REALM_NAME:
-        return new PatientRealm();
-      case process.env.KEYCLOAK_DOTBASE_REALM_NAME:
-        return new DotbaseRealm();
-      default:
-        throw new Error("Keycloak realm name is not defined.");
-    }
   }
 
   public static get baseUrl(): string {
@@ -34,7 +21,7 @@ export default abstract class KeycloakApi {
     username: string,
     password: string
   ): Promise<Tokens> {
-    const realmConfig = this.realmConfig(realmName);
+    const realmConfig = RealmsUtil.realmConfig(realmName);
     const loginParams = new URLSearchParams();
     loginParams.append("client_id", realmConfig.clientId);
     loginParams.append("client_secret", realmConfig.clientSecret);
@@ -55,7 +42,7 @@ export default abstract class KeycloakApi {
   }
 
   public static async refresh(realmName: string, refreshToken: string): Promise<Tokens> {
-    const realmConfig = this.realmConfig(realmName);
+    const realmConfig = RealmsUtil.realmConfig(realmName);
     const loginParams = new URLSearchParams();
     loginParams.append("client_id", realmConfig.clientId);
     loginParams.append("client_secret", realmConfig.clientSecret);
@@ -74,8 +61,8 @@ export default abstract class KeycloakApi {
     return response.json();
   }
 
-  public static async certificates(): Promise<string[]> {
-    const response = await fetch(`${this.baseUrl}/protocol/openid-connect/certs`);
+  public static async certificates(realmName: string): Promise<string[]> {
+    const response = await fetch(`${this.baseUrl}/${realmName}/protocol/openid-connect/certs`);
 
     if (!response.ok)
       throw new Error(

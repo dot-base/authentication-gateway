@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export default class JwtUtil {
   public static verify(accessToken: string, cert: string): Promise<void> {
@@ -17,5 +17,11 @@ export default class JwtUtil {
     } catch (e) {
       return false;
     }
+  }
+
+  public static async decode(accessToken: string): Promise<JwtPayload> {
+    const decoded = jwt.decode(accessToken);
+    if (!decoded) throw new Error("Access token is invalid.");
+    return decoded as JwtPayload;
   }
 }
