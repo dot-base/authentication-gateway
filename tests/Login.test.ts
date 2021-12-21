@@ -18,7 +18,7 @@ export default class LoginTestGroup {
   )
   private async testValidLoginCredentials() {
     await request(express)
-      .post("/api/auth/login")
+      .post("/api/auth/login/testrealm")
       .send({ username: "test", password: "test" })
       .set("Accept", "application/json")
       .expect(200)
@@ -28,7 +28,7 @@ export default class LoginTestGroup {
   @Test("should respond with HTTP status 403 if invalid login credentials are submitted")
   private async testInvalidLoginCredentials() {
     await request(express)
-      .post("/api/auth/login")
+      .post("/api/auth/login/testrealm")
       .send({ username: "test", password: "toast" })
       .set("Accept", "application/json")
       .expect(403);
@@ -37,13 +37,13 @@ export default class LoginTestGroup {
   @Test("should respond with HTTP status 403 if incomplete login credentials are submitted")
   private async testIncompleteLoginCredentials() {
     await request(express)
-      .post("/api/auth/login")
+      .post("/api/auth/login/testrealm")
       .send({ username: "test" })
       .set("Accept", "application/json")
       .expect(403);
 
     await request(express)
-      .post("/api/auth/login")
+      .post("/api/auth/login/testrealm")
       .send({ password: "toast" })
       .set("Accept", "application/json")
       .expect(403);
@@ -51,6 +51,6 @@ export default class LoginTestGroup {
 
   @Test("should respond with HTTP status 403 if login credentials are missing")
   private async testMissingLoginCredentials() {
-    await request(express).post("/api/auth/login").expect(403);
+    await request(express).post("/api/auth/login/testrealm").expect(403);
   }
 }
