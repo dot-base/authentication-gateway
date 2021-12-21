@@ -16,7 +16,7 @@ export default class ValidationTestGroup {
   @Test("should respond with HTTP status 200 if a valid session cookie is submitted")
   private async testValidSessionCookie() {
     const loginResponse = await request(express)
-      .post("/api/auth/login")
+      .post("/api/auth/login/testrealm")
       .send({ username: "test", password: "test" })
       .set("Accept", "application/json");
 
