@@ -21,14 +21,19 @@ Want a authentication gateway of your own? The easiest way is to deploy our dock
 ### Deployment
 1. Set environment variables to configure the container:
     ```sh
-    export KEYCLOAK_REALM_NAME="dotbase"
-    export KEYCLOAK_CLIENT_ID="YOUR-CLIENT-ID"
-    export KEYCLOAK_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+    export KEYCLOAK_DOTBASE_REALM_NAME="dotbase"
+    export KEYCLOAK_DOTBASE_REALM_CLIENT_ID="YOUR-CLIENT-ID"
+    export KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+
+    export KEYCLOAK_PATIENT_REALM_NAME="patients"
+    export KEYCLOAK_PATIENT_REALM_CLIENT_ID="YOUR-CLIENT-ID"
+    export KEYCLOAK_PATIENT_REALM_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+
     export COOKIE_ENCRYPTION_PASSPHRASE_AES="YOUR-SECRET-TO-ENCRYPT-THE-SESSION-COOKIE"
     ```
 1. Start the container
     ```
-    docker run --name authentication-gateway -e KEYCLOAK_REALM_NAME -e KEYCLOAK_CLIENT_ID -e KEYCLOAK_CLIENT_SECRET -e COOKIE_ENCRYPTION_PASSPHRASE_AES -p 3000:3000 -d ghcr.io/dot-base/authentication-gateway:latest
+    docker run --name authentication-gateway -e KEYCLOAK_DOTBASE_REALM_NAME -e KEYCLOAK_DOTBASE_REALM_CLIENT_ID -e KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET -e KEYCLOAK_PATIENT_REALM_NAME -e KEYCLOAK_PATIENT_REALM_CLIENT_ID -e KEYCLOAK_PATIENT_REALM_CLIENT_SECRET -e COOKIE_ENCRYPTION_PASSPHRASE_AES -p 3000:3000 -d ghcr.io/dot-base/authentication-gateway:latest
     ```
 1. Done and dusted 🎉. The Server is available on port 3000.
 
@@ -39,9 +44,12 @@ Want a authentication gateway of your own? The easiest way is to deploy our dock
 | Variable Name | Default | Example |
 | --- | --- | --- |
 | KEYCLOAK_SERVER_ADDRESS | http://keycloak:8080 | - |
-| KEYCLOAK_REALM_NAME | - | dotbase |
-| KEYCLOAK_CLIENT_ID | - | authentication-gateway |
-| KEYCLOAK_CLIENT_SECRET | - | - |
+| KEYCLOAK_DOTBASE_REALM_NAME | - | dotbase |
+| KEYCLOAK_DOTBASE_REALM_CLIENT_ID | - | authentication-gateway |
+| KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET | - | - |
+| KEYCLOAK_PATIENT_REALM_NAME | - | patients |
+| KEYCLOAK_PATIENT_REALM_CLIENT_ID | - | authentication-gateway |
+| KEYCLOAK_PATIENT_REALM_CLIENT_SECRET | - | - |
 
 ### Encryption
 Used to encrypt the token cookie before sending it to the client
@@ -74,10 +82,15 @@ This project is written in Typescript. For an introduction into the language and
     npm install
     ```
 1. Set environment variables to configure the application:
-    ```sh
-    export KEYCLOAK_REALM_NAME="dotbase"
-    export KEYCLOAK_CLIENT_ID="YOUR-CLIENT-ID"
-    export KEYCLOAK_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+    ```sh  
+    export KEYCLOAK_DOTBASE_REALM_NAME="dotbase"
+    export KEYCLOAK_DOTBASE_REALM_CLIENT_ID="YOUR-CLIENT-ID"
+    export KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+
+    export KEYCLOAK_PATIENT_REALM_NAME="patients"
+    export KEYCLOAK_PATIENT_REALM_CLIENT_ID="YOUR-CLIENT-ID"
+    export KEYCLOAK_PATIENT_REALM_CLIENT_SECRET="YOUR-CLIENT-SECRET"
+
     export COOKIE_ENCRYPTION_PASSPHRASE_AES="YOUR-SECRET-TO-ENCRYPT-THE-SESSION-COOKIE"
     ```
 1. Start the development server
