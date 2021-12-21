@@ -1,6 +1,6 @@
 import KeycloakApi from "@/api/__mocks__/keycloak";
 import mockTokens from "@tests/__mocks__/tokens";
-import CryptoService from "@/services/Crypto";
+import CryptoService from "@/services/__mocks__/Crypto";
 
 export default class CookieService {
   public static async createSessionCookie(
@@ -9,7 +9,7 @@ export default class CookieService {
     password: string
   ): Promise<string> {
     const tokens = await KeycloakApi.login(realmName, username, password);
-    return CryptoService.encrypt(tokens);
+    return CryptoService.encrypt(realmName, tokens);
   }
 
   public static async renewSessionCookie(
@@ -18,7 +18,7 @@ export default class CookieService {
   ): Promise<string> {
     const tokens = CryptoService.decrypt(sessionCookie);
     const newTokens = await KeycloakApi.refresh(realmName, tokens.refresh_token);
-    return CryptoService.encrypt(newTokens);
+    return CryptoService.encrypt(realmName, newTokens);
   }
 
   public static async validateSessionCookie(sessionCookie: string): Promise<void> {

@@ -7,13 +7,13 @@ export default class KeycloakApi {
     username: string,
     password: string
   ): Promise<Tokens> {
-    if (realmName != "testrealm" || username !== "test" || password !== "test")
+    if (realmName !== "testrealm" || username !== "test" || password !== "test")
       throw new Error("Unable to login.");
     return mockTokens;
   }
 
   public static async refresh(realmName: string, refreshToken: string): Promise<Tokens> {
-    if (realmName != "testrealm" || refreshToken !== mockTokens.refresh_token)
+    if (realmName !== "testrealm" || refreshToken !== mockTokens.refresh_token)
       throw new Error("Unable to login.");
     return mockTokens;
   }
