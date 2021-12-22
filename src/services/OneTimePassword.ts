@@ -1,5 +1,5 @@
 import KeycloakApi from "@/api/keycloak";
-import CookieService from "./Cookie";
+import CookieService from "@/services/Cookie";
 
 export default class OneTimePassword {
   public static async getQrCode(patientId: string): Promise<string> {
