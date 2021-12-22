@@ -1,6 +1,7 @@
 import KeycloakApi from "@/api/__mocks__/keycloak";
 import mockTokens from "@tests/__mocks__/tokens";
 import CryptoService from "@/services/__mocks__/Crypto";
+import RealmsUtil from "@/utils/realms";
 
 export default class CookieService {
   public static async createSessionCookie(
@@ -21,9 +22,12 @@ export default class CookieService {
     return CryptoService.encrypt(realmName, newTokens);
   }
 
-  public static async validateSessionCookie(sessionCookie: string): Promise<void> {
+  public static async validateSessionCookie(sessionCookie: string): Promise<string> {
     const tokens = CryptoService.decrypt(sessionCookie);
+    const realmName = await RealmsUtil.realmName(tokens);
+
     if (tokens.access_token !== mockTokens.access_token)
       throw new Error("Access token is invalid.");
+    return realmName;
   }
 }
