@@ -34,4 +34,9 @@ export default class CookieService {
     }
     throw new Error("Access token is invalid.");
   }
+
+  public static async getUserInfo(sessionCookie: string): Promise<string> {
+    const tokens = CryptoService.decrypt(sessionCookie);
+    return await JwtUtil.getUserName(tokens);
+  }
 }

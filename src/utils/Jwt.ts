@@ -32,4 +32,11 @@ export default class JwtUtil {
     if (!realmName) throw new Error("Access token is invalid.");
     return realmName;
   }
+
+  public static async getUserName(tokens: Tokens): Promise<string> {
+    const jwtPayload = await JwtUtil.decode(tokens.access_token);
+    const userInfo = jwtPayload.preferred_username;
+    if (!userInfo) throw new Error("Access token is invalid.");
+    return userInfo;
+  }
 }
