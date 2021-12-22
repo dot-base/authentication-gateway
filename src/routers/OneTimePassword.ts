@@ -7,8 +7,10 @@ router.use("/:patientId", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    const qrCode = await OTPService.getQrCode(req.params.patientId, req.cookies.session);
+    const realmName = await OTPService.getAuthorizedRealmName(req.cookies.session);
+    const qrCode = await OTPService.getQrCode(req.params.patientId);
 
+    res.setHeader("X-Auth-Realm", realmName);
     res.status(200).send(qrCode);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
