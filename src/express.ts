@@ -14,6 +14,6 @@ app.use(cookieParser());
 app.use("/api/auth/login", LoginRouter);
 app.use("/api/auth/validate", ValidationRouter);
 app.use("/api/auth/renew", RenewalRouter);
-app.use("/api/totp/setup", OTPRouter);
+app.use("/api/auth/totp/setup", OTPRouter);
 
 export default app;
