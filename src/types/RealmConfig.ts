@@ -1,4 +1,3 @@
-//TODO: abstract class
 export default abstract class RealmConfig {
   public abstract get realmName(): string;
   public abstract get clientId(): string;

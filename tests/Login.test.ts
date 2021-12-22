@@ -1,17 +1,14 @@
-import { BeforeAll, Describe, Test } from "jest-decorator";
+import { Describe, Test } from "jest-decorator";
 import request from "supertest";
 
 import express from "@/express";
 
 jest.mock("@/api/keycloak");
+jest.mock("@/models/realms/RealmFactory");
 jest.mock("@/services/Cookie");
 
 @Describe("Login endpoint")
 export default class LoginTestGroup {
-  @BeforeAll
-  private beforeAll() {
-    process.env.COOKIE_ENCRYPTION_PASSPHRASE_AES = "some_passphrase";
-  }
 
   @Test(
     "should respond with HTTP status 200 and a session cookie if valid login credentials are submitted"

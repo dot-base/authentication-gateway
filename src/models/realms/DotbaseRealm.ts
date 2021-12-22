@@ -1,7 +1,6 @@
 import RealmConfig from "@/types/RealmConfig";
 import CertificateModel from "@/models/Certificate";
 
-//static
 export default class DotbaseRealmModel implements RealmConfig {
   constructor() {
     this._certificateModel = new CertificateModel();

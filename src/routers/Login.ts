@@ -6,7 +6,7 @@ const router: express.Router = express.Router();
 
 router.post("/:realmName", async (req, res) => {
   try {
-    if (!req.body.username) throw new Error("Request body is missing an username.");
+    if (!req.body.username) throw new Error("Request body is missing a username.");
     if (!req.body.password) throw new Error("Request body is missing a password.");
 
     const realm = RealmFactory.realm(req.params.realmName);
