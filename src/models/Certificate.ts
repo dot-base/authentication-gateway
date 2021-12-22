@@ -1,4 +1,5 @@
 import KeycloakApi from "@/api/keycloak";
+import RealmConfig from "@/types/RealmConfig";
 
 export default class CertificateModel {
   private static _certificates: Map<string, string[]> = new Map();
@@ -20,8 +21,8 @@ export default class CertificateModel {
     CertificateModel._certificates.set(realmName, certs);
   }
 
-  public async fetchCertificates(realmName: string): Promise<void> {
-    const certificates = await KeycloakApi.certificates(realmName);
-    this.addCertificates(realmName, certificates);
+  public async fetchCertificates(realm: RealmConfig): Promise<void> {
+    const certificates = await KeycloakApi.certificates(realm);
+    this.addCertificates(realm.realmName, certificates);
   }
 }

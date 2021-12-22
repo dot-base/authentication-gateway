@@ -1,17 +1,18 @@
 import RealmConfig from "@/types/RealmConfig";
 import CertificateModel from "@/models/Certificate";
 
+//static
 export default class DotbaseRealmModel implements RealmConfig {
   constructor() {
     this._certificateModel = new CertificateModel();
-    this._certificateModel.fetchCertificates(this.realmName);
+    this._certificateModel.fetchCertificates(this);
   }
 
-  private static instance: DotbaseRealmModel;
+  private static _instance: DotbaseRealmModel;
 
-  public static getInstance(): DotbaseRealmModel {
-    if (!this.instance) this.instance = new DotbaseRealmModel();
-    return this.instance;
+  public static get instance(): DotbaseRealmModel {
+    if (!this._instance) this._instance = new DotbaseRealmModel();
+    return this._instance;
   }
 
   private _certificateModel;
@@ -34,7 +35,13 @@ export default class DotbaseRealmModel implements RealmConfig {
     return process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET;
   }
 
-  public certs(): string[] {
+  public get passPhrase(): string {
+    if (!process.env.DOTBASE_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES)
+      throw new Error("Keycloak cookie encryption passphrase is not defined.");
+    return process.env.DOTBASE_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES;
+  }
+
+  public get certs(): string[] {
     return this._certificateModel.certificates(this.realmName);
   }
 }

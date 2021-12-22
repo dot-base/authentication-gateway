@@ -1,33 +1,15 @@
 import CryptoJS from "crypto-js";
 import Tokens from "@/types/Tokens";
+import RealmFactory from "@/models/realms/RealmFactory";
+import RealmConfig from "@/types/RealmConfig";
 
 export default class CryptoService {
   private static get aesPassphrases(): string[] {
-    if (
-      !process.env.DOTBASE_COOKIE_ENCRYPTION_PASSPHRASE_AES ||
-      !process.env.PATIENT_COOKIE_ENCRYPTION_PASSPHRASE_AES
-    )
-      throw new Error("AES passphrase not defined.");
-    return [
-      process.env.DOTBASE_COOKIE_ENCRYPTION_PASSPHRASE_AES,
-      process.env.PATIENT_COOKIE_ENCRYPTION_PASSPHRASE_AES,
-    ];
+    return RealmFactory.realms.map((realm) => realm.passPhrase);
   }
 
-  private static aesPassphrase(realmName: string): string {
-    let passPhrase;
-    switch (realmName) {
-      case process.env.KEYCLOAK_DOTBASE_REALM_NAME:
-        passPhrase = process.env.DOTBASE_COOKIE_ENCRYPTION_PASSPHRASE_AES;
-      case process.env.KEYCLOAK_PATIENT_REALM_NAME:
-        passPhrase = process.env.PATIENT_COOKIE_ENCRYPTION_PASSPHRASE_AES;
-    }
-    if (!passPhrase) throw new Error("AES passphrase not defined.");
-    return passPhrase;
-  }
-
-  public static encrypt(realmName: string, tokens: Tokens): string {
-    return CryptoJS.AES.encrypt(JSON.stringify(tokens), this.aesPassphrase(realmName)).toString();
+  public static encrypt(realm: RealmConfig, tokens: Tokens): string {
+    return CryptoJS.AES.encrypt(JSON.stringify(tokens), realm.passPhrase).toString();
   }
 
   public static decrypt(sessionCookie: string): Tokens {

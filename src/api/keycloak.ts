@@ -2,7 +2,7 @@ import fetch, { BodyInit } from "node-fetch";
 
 import KeycloakCerts from "@/types/KeycloakCerts";
 import Tokens from "@/types/Tokens";
-import RealmsUtil from "@/utils/realms";
+import RealmConfig from "@/types/RealmConfig";
 
 export default abstract class KeycloakApi {
   private static get serverAddress(): string {
@@ -17,20 +17,19 @@ export default abstract class KeycloakApi {
   }
 
   public static async login(
-    realmName: string,
+    realm: RealmConfig,
     username: string,
     password: string
   ): Promise<Tokens> {
-    const realmConfig = RealmsUtil.realmConfig(realmName);
     const loginParams = new URLSearchParams();
-    loginParams.append("client_id", realmConfig.clientId);
-    loginParams.append("client_secret", realmConfig.clientSecret);
+    loginParams.append("client_id", realm.clientId);
+    loginParams.append("client_secret", realm.clientSecret);
     loginParams.append("grant_type", "password");
     loginParams.append("username", username);
     loginParams.append("password", password);
 
     const response = await fetch(
-      `${this.baseUrl}/${realmConfig.realmName}/protocol/openid-connect/token`,
+      `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/token`,
       {
         method: "POST",
         body: loginParams as unknown as BodyInit,
@@ -41,16 +40,15 @@ export default abstract class KeycloakApi {
     return response.json();
   }
 
-  public static async refresh(realmName: string, refreshToken: string): Promise<Tokens> {
-    const realmConfig = RealmsUtil.realmConfig(realmName);
+  public static async refresh(realm: RealmConfig, refreshToken: string): Promise<Tokens> {
     const loginParams = new URLSearchParams();
-    loginParams.append("client_id", realmConfig.clientId);
-    loginParams.append("client_secret", realmConfig.clientSecret);
+    loginParams.append("client_id", realm.clientId);
+    loginParams.append("client_secret", realm.clientSecret);
     loginParams.append("grant_type", "refresh_token");
     loginParams.append("refresh_token", refreshToken);
 
     const response = await fetch(
-      `${this.baseUrl}/${realmConfig.realmName}/protocol/openid-connect/token`,
+      `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/token`,
       {
         method: "POST",
         body: loginParams as unknown as BodyInit,
@@ -61,8 +59,10 @@ export default abstract class KeycloakApi {
     return response.json();
   }
 
-  public static async certificates(realmName: string): Promise<string[]> {
-    const response = await fetch(`${this.baseUrl}/${realmName}/protocol/openid-connect/certs`);
+  public static async certificates(realm: RealmConfig): Promise<string[]> {
+    const response = await fetch(
+      `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/certs`
+    );
 
     if (!response.ok)
       throw new Error(

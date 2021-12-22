@@ -1,6 +1,8 @@
-export default interface RealmConfig {
-  realmName: string;
-  clientId: string;
-  clientSecret: string;
-  certs(): string[];
+//TODO: abstract class
+export default abstract class RealmConfig {
+  public abstract get realmName(): string;
+  public abstract get clientId(): string;
+  public abstract get clientSecret(): string;
+  public abstract get passPhrase(): string;
+  public abstract get certs(): string[];
 }

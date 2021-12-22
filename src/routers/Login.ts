@@ -1,5 +1,6 @@
 import express from "express";
 import CookieService from "@/services/Cookie";
+import RealmFactory from "@/models/realms/RealmFactory";
 
 const router: express.Router = express.Router();
 
@@ -8,8 +9,9 @@ router.post("/:realmName", async (req, res) => {
     if (!req.body.username) throw new Error("Request body is missing an username.");
     if (!req.body.password) throw new Error("Request body is missing a password.");
 
+    const realm = RealmFactory.realm(req.params.realmName);
     const sessionCookie = await CookieService.createSessionCookie(
-      req.params.realmName,
+      realm,
       req.body.username,
       req.body.password
     );
@@ -18,7 +20,6 @@ router.post("/:realmName", async (req, res) => {
       expires: new Date(Date.now() + 900000),
       httpOnly: true,
     });
-    res.setHeader("X-Auth-Realm",req.params.realmName)
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
