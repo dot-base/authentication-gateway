@@ -1,5 +1,5 @@
 # valid (if the credentials are accepted by keycloak
-POST http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/auth/login/dotbase
 Content-Type: application/json
 
 {
@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 # invalid: password missing
-POST http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/auth/login/dotbase
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 # invalid: username missing
-POST http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/auth/login/dotbase
 Content-Type: application/json
 
 {
@@ -24,7 +24,7 @@ Content-Type: application/json
 }
 
 # invalid: empty body
-POST http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/auth/login/dotbase
 Content-Type: application/json
 
 {
