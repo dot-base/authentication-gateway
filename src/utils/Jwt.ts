@@ -1,4 +1,5 @@
-import jwt from "jsonwebtoken";
+import Tokens from "@/types/Tokens";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export default class JwtUtil {
   public static verify(accessToken: string, cert: string): Promise<void> {
@@ -17,5 +18,18 @@ export default class JwtUtil {
     } catch (e) {
       return false;
     }
+  }
+
+  public static decode(accessToken: string): JwtPayload {
+    const decoded = jwt.decode(accessToken);
+    if (!decoded) throw new Error("Access token is invalid.");
+    return decoded as JwtPayload;
+  }
+
+  public static getRealmName(tokens: Tokens): string {
+    const jwtPayload = JwtUtil.decode(tokens.access_token);
+    const realmName = jwtPayload.iss?.split("/").pop();
+    if (!realmName) throw new Error("Access token is invalid.");
+    return realmName;
   }
 }

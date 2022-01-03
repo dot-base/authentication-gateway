@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 import Tokens from "@/types/Tokens";
-import RealmFactory from "@/models/realms/RealmFactory";
+import RealmFactory from "@/models/realms/__mocks__/RealmFactory";
 import RealmConfig from "@/types/RealmConfig";
 
 export default class CryptoService {

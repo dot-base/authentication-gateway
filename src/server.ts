@@ -32,10 +32,14 @@ export default class Server {
 
   private static validateEnvironmentVariables() {
     const requiredEnvVariables = [
-      "COOKIE_ENCRYPTION_PASSPHRASE_AES",
-      "KEYCLOAK_REALM_NAME",
-      "KEYCLOAK_CLIENT_ID",
-      "KEYCLOAK_CLIENT_SECRET",
+      "KEYCLOAK_DOTBASE_REALM_NAME",
+      "KEYCLOAK_DOTBASE_REALM_CLIENT_ID",
+      "KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET",
+      "DOTBASE_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES",
+      "KEYCLOAK_PATIENT_REALM_NAME",
+      "KEYCLOAK_PATIENT_REALM_CLIENT_ID",
+      "KEYCLOAK_PATIENT_REALM_CLIENT_SECRET",
+      "PATIENT_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES",
     ];
     for (const envVariable of requiredEnvVariables) {
       if (!process.env[envVariable])
