@@ -1,13 +1,15 @@
 import express from "express";
 import CookieService from "@/services/Cookie";
+import RealmFactory from "@/models/realms/RealmFactory";
 
 const router: express.Router = express.Router();
 
-router.use("/", async (req, res) => {
+router.use("/:realmName", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    const sessionCookie = await CookieService.renewSessionCookie(req.cookies.session);
+    const realm = RealmFactory.realm(req.params.realmName);
+    const sessionCookie = await CookieService.renewSessionCookie(realm, req.cookies.session);
 
     res.cookie("session", sessionCookie, {
       expires: new Date(Date.now() + 900000),
