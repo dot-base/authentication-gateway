@@ -25,7 +25,7 @@ export default class CookieService {
 
   public static async validateSessionCookie(sessionCookie: string): Promise<RealmConfig> {
     const tokens = CryptoService.decrypt(sessionCookie);
-    const realmName = await JwtUtil.getRealmName(tokens);
+    const realmName = JwtUtil.getRealmName(tokens);
     const realm = RealmFactory.realm(realmName);
 
     for (const certificate of realm.certs) {

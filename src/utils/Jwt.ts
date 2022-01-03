@@ -20,14 +20,14 @@ export default class JwtUtil {
     }
   }
 
-  public static async decode(accessToken: string): Promise<JwtPayload> {
+  public static decode(accessToken: string): JwtPayload {
     const decoded = jwt.decode(accessToken);
     if (!decoded) throw new Error("Access token is invalid.");
     return decoded as JwtPayload;
   }
 
-  public static async getRealmName(tokens: Tokens): Promise<string> {
-    const jwtPayload = await JwtUtil.decode(tokens.access_token);
+  public static getRealmName(tokens: Tokens): string {
+    const jwtPayload = JwtUtil.decode(tokens.access_token);
     const realmName = jwtPayload.iss?.split("/").pop();
     if (!realmName) throw new Error("Access token is invalid.");
     return realmName;
