@@ -7,7 +7,6 @@ import RenewalRouter from "@/routers/Renewal";
 import OTPRouter from "@/routers/OneTimePassword";
 import UserInfoRouter from "@/routers/UserInfo";
 
-
 const app = express();
 
 app.use(express.json());
