@@ -2,6 +2,7 @@ import KeycloakApi from "@/api/keycloak";
 import RealmFactory from "@/models/realms/RealmFactory";
 import CryptoService from "@/services/Crypto";
 import RealmConfig from "@/types/RealmConfig";
+import UserInfo from "@/types/UserInfo";
 import JwtUtil from "@/utils/Jwt";
 
 export default class CookieService {
@@ -35,8 +36,8 @@ export default class CookieService {
     throw new Error("Access token is invalid.");
   }
 
-  public static async getUserInfo(sessionCookie: string): Promise<string> {
+  public static async getUserInfo(sessionCookie: string): Promise<UserInfo> {
     const tokens = CryptoService.decrypt(sessionCookie);
-    return await JwtUtil.getUserName(tokens);
+    return JwtUtil.getUserInfo(tokens);
   }
 }

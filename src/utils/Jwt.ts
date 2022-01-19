@@ -1,4 +1,5 @@
 import Tokens from "@/types/Tokens";
+import UserInfo from "@/types/UserInfo";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export default class JwtUtil {
@@ -33,10 +34,23 @@ export default class JwtUtil {
     return realmName;
   }
 
-  public static async getUserName(tokens: Tokens): Promise<string> {
-    const jwtPayload = await JwtUtil.decode(tokens.access_token);
+  public static getUserName(tokens: Tokens): string {
+    const jwtPayload = JwtUtil.decode(tokens.access_token);
     const userInfo = jwtPayload.preferred_username;
     if (!userInfo) throw new Error("Access token is invalid.");
+    return userInfo;
+  }
+
+  public static getUserInfo(tokens: Tokens): UserInfo {
+    const jwtPayload = JwtUtil.decode(tokens.access_token);
+    const userInfo: UserInfo = {
+      preferred_username: jwtPayload.preferred_username,
+      name: jwtPayload.name,
+      given_name: jwtPayload.given_name,
+      family_name: jwtPayload.family_name,
+      email: jwtPayload.email,
+      email_verified: jwtPayload.email_verified,
+    };
     return userInfo;
   }
 }
