@@ -50,6 +50,7 @@ export default class JwtUtil {
       family_name: jwtPayload.family_name,
       email: jwtPayload.email,
       email_verified: jwtPayload.email_verified,
+      realm_access_roles: jwtPayload.realm_access.roles,
     };
     return userInfo;
   }

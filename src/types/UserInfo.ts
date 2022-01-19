@@ -5,4 +5,5 @@ export default interface UserInfo {
   given_name: string;
   email: string;
   email_verified: boolean;
+  realm_access_roles: string[];
 }
