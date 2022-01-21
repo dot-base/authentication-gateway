@@ -9,7 +9,6 @@ jest.mock("@/services/Cookie");
 
 @Describe("Renewal endpoint")
 export default class RenewalTestGroup {
-
   @Test(
     "should respond with HTTP status 200 and a session cookie if a valid session cookie is submitted"
   )
