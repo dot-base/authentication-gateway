@@ -1,6 +1,5 @@
 import express from "express";
 import OTPService from "@/services/OneTimePassword";
-import RealmFactory from "@/models/realms/RealmFactory";
 
 const router: express.Router = express.Router();
 
