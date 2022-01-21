@@ -73,10 +73,8 @@ export default abstract class KeycloakApi {
     return certsJson.keys.flatMap((key) => key.x5c);
   }
 
-  public static async setupTOTP(patientId: string): Promise<string> {
-    const response = await fetch(
-      `${this.baseUrl}/${RealmsUtil.patientRealmName}/totp/setup/${patientId}`
-    );
+  public static async setupTOTP(realm: RealmConfig, username: string): Promise<string> {
+    const response = await fetch(`${this.baseUrl}/${realm.realmName}/totp/setup/${username}`);
 
     if (!response.ok)
       throw new Error(

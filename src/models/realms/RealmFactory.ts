@@ -5,7 +5,7 @@ import DotbaseRealmModel from "@/models/realms/DotbaseRealm";
 export default abstract class RealmFactory {
   public static realms = [PatientRealmModel.instance, DotbaseRealmModel.instance];
 
-  public static realm(realmName: string): realmConfig {
+  public static realm(realmName: string | undefined): realmConfig {
     switch (realmName) {
       case process.env.KEYCLOAK_DOTBASE_REALM_NAME:
         return DotbaseRealmModel.instance;
