@@ -4,7 +4,7 @@ COPY . .
 RUN npm install && \
     npm run build && \
     mkdir ./builder && \
-    mv ./build ./builder/build && \
+    mv ./build/src ./builder/build && \
     mv ./tsconfig.json ./builder/tsconfig.json && \
     mv ./package.json ./builder/package.json
 

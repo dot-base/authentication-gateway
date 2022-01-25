@@ -1,22 +1,18 @@
-import { BeforeAll, Describe, Test } from "jest-decorator";
+import { Describe, Test } from "jest-decorator";
 import request from "supertest";
 
 import express from "@/express";
 
 jest.mock("@/api/keycloak");
+jest.mock("@/models/realms/RealmFactory");
 jest.mock("@/services/Cookie");
 
 @Describe("Validation endpoint")
 export default class ValidationTestGroup {
-  @BeforeAll
-  private async beforeAll() {
-    process.env.COOKIE_ENCRYPTION_PASSPHRASE_AES = "some_passphrase";
-  }
-
   @Test("should respond with HTTP status 200 if a valid session cookie is submitted")
   private async testValidSessionCookie() {
     const loginResponse = await request(express)
-      .post("/api/auth/login")
+      .post("/api/auth/login/testrealm")
       .send({ username: "test", password: "test" })
       .set("Accept", "application/json");
 

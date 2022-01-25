@@ -1,14 +1,17 @@
 import express from "express";
 import CookieService from "@/services/Cookie";
+import RealmFactory from "@/models/realms/RealmFactory";
 
 const router: express.Router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/:realmName", async (req, res) => {
   try {
-    if (!req.body.username) throw new Error("Request body is missing an username.");
+    if (!req.body.username) throw new Error("Request body is missing a username.");
     if (!req.body.password) throw new Error("Request body is missing a password.");
 
+    const realm = RealmFactory.realm(req.params.realmName);
     const sessionCookie = await CookieService.createSessionCookie(
+      realm,
       req.body.username,
       req.body.password
     );

@@ -1,17 +1,15 @@
 import express from "express";
-import CookieService from "@/services/Cookie";
-import RealmConfig from "@/types/RealmConfig";
+import OTPService from "@/services/OneTimePassword";
 
 const router: express.Router = express.Router();
 
-router.use("/", async (req, res) => {
+router.use("/:patientId", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    const realm: RealmConfig = await CookieService.validateSessionCookie(req.cookies.session);
+    const qrCode = await OTPService.getQrCode(req.cookies.session, req.params.patientId);
 
-    res.setHeader("X-Auth-Realm", realm.realmName);
-    res.status(200).send();
+    res.status(200).send({ qrCode: qrCode });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
