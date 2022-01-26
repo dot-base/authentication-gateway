@@ -3,5 +3,4 @@ export default abstract class RealmConfig {
   public abstract get clientId(): string;
   public abstract get clientSecret(): string;
   public abstract get passPhrase(): string;
-  public abstract get certs(): string[];
 }

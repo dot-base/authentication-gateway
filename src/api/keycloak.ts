@@ -1,6 +1,5 @@
 import fetch, { BodyInit } from "node-fetch";
 
-import KeycloakCerts from "@/types/KeycloakCerts";
 import Tokens from "@/types/Tokens";
 import RealmConfig from "@/types/RealmConfig";
 
@@ -75,20 +74,6 @@ export default abstract class KeycloakApi {
     if (!response.ok) throw new Error("Unable to validate token.");
 
     return true;
-  }
-
-  public static async certificates(realm: RealmConfig): Promise<string[]> {
-    const response = await fetch(
-      `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/certs`
-    );
-
-    if (!response.ok)
-      throw new Error(
-        `Unable to fetch certificates from keycloak server. Server responded with HTTP ${response.status}.`
-      );
-
-    const certsJson = (await response.json()) as KeycloakCerts;
-    return certsJson.keys.flatMap((key) => key.x5c);
   }
 
   public static async setupTOTP(realm: RealmConfig, username: string): Promise<string> {
