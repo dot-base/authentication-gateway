@@ -26,10 +26,4 @@ export default class KeycloakApi {
       throw new Error("Unable to login.");
     return mockTokens;
   }
-
-  public static async certificates(realm: RealmConfig): Promise<string[]> {
-    if (!realm.certs) throw new Error(`Unable to fetch certificates from keycloak server.`);
-
-    return realm.certs;
-  }
 }

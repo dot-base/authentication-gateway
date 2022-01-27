@@ -28,12 +28,11 @@ export default class CookieService {
     const tokens = CryptoService.decrypt(sessionCookie);
     const realmName = JwtUtil.getRealmName(tokens);
     const realm = RealmFactory.realm(realmName);
+    const tokenIsValid = await KeycloakApi.validate(realm, tokens);
 
-    for (const certificate of realm.certs) {
-      const tokenIsValid = await JwtUtil.isValid(tokens.access_token, certificate);
-      if (tokenIsValid) return realm;
-    }
-    throw new Error("Access token is invalid.");
+    if (tokenIsValid) throw new Error("Access token is invalid.");
+
+    return realm;
   }
 
   public static async getUserInfo(sessionCookie: string): Promise<UserInfo> {
