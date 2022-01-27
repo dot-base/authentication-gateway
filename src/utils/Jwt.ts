@@ -34,13 +34,6 @@ export default class JwtUtil {
     return realmName;
   }
 
-  public static getUserName(tokens: Tokens): string {
-    const jwtPayload = JwtUtil.decode(tokens.access_token);
-    const userInfo = jwtPayload.preferred_username;
-    if (!userInfo) throw new Error("Access token is invalid.");
-    return userInfo;
-  }
-
   public static getUserInfo(tokens: Tokens): UserInfo {
     const jwtPayload = JwtUtil.decode(tokens.access_token);
     const userInfo: UserInfo = {
