@@ -59,6 +59,24 @@ export default abstract class KeycloakApi {
     return response.json();
   }
 
+  public static async validate(realm: RealmConfig, tokens: Tokens): Promise<boolean> {
+    const loginParams = new URLSearchParams();
+    loginParams.append("client_id", realm.clientId);
+    loginParams.append("client_secret", realm.clientSecret);
+    loginParams.append("token", tokens.access_token);
+
+    const response = await fetch(
+      `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/token/introspect`,
+      {
+        method: "POST",
+        body: loginParams as unknown as BodyInit,
+      }
+    );
+    if (!response.ok) throw new Error("Unable to validate token.");
+
+    return true;
+  }
+
   public static async certificates(realm: RealmConfig): Promise<string[]> {
     const response = await fetch(
       `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/certs`
