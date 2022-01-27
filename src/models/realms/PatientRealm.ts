@@ -1,13 +1,6 @@
 import RealmConfig from "@/types/RealmConfig";
 
-export default class PatientRealmModel implements RealmConfig {
-  private static _instance: PatientRealmModel;
-
-  public static get instance(): PatientRealmModel {
-    if (!this._instance) this._instance = new PatientRealmModel();
-    return this._instance;
-  }
-
+class PatientRealmModel implements RealmConfig {
   public get realmName(): string {
     if (!process.env.KEYCLOAK_PATIENT_REALM_NAME)
       throw new Error("Keycloak realm name is not defined.");
@@ -32,3 +25,5 @@ export default class PatientRealmModel implements RealmConfig {
     return process.env.PATIENT_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES;
   }
 }
+
+export default new PatientRealmModel();
