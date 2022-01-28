@@ -53,7 +53,7 @@ export default abstract class KeycloakApi {
         body: loginParams as unknown as BodyInit,
       }
     );
-    if (!response.ok) throw new Error("Unable to login.");
+    if (!response.ok) throw new Error("Unable to refresh token.");
 
     return response.json();
   }
