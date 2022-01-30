@@ -3,7 +3,7 @@ import OTPService from "@/services/OneTimePassword";
 
 const router: express.Router = express.Router();
 
-router.use("/:patientId", async (req, res) => {
+router.use("/setup/:patientId", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
