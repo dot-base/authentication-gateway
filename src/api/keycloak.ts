@@ -87,4 +87,23 @@ export default abstract class KeycloakApi {
 
     return await response.text();
   }
+
+  public static async registerDevice(
+    totpConfig: TOTPConfig,
+    realm: RealmConfig,
+    username: string
+  ): Promise<void> {
+    const response = await fetch(`${this.baseUrl}/${realm.realmName}/totp/device/${username}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(totpConfig),
+    });
+
+    if (!response.ok)
+      throw new Error(
+        `Unable to register device at keycloak server for OTP setup. Server responded with HTTP ${response.status}.`
+      );
+  }
 }
