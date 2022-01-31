@@ -3,6 +3,7 @@ import fetch, { BodyInit } from "node-fetch";
 import Tokens from "@/types/Tokens";
 import RealmConfig from "@/types/RealmConfig";
 import TokenIntrospection from "@/types/TokenIntrospection";
+import TOTPConfig from "@/types/TOTPConfig";
 
 export default abstract class KeycloakApi {
   private static get serverAddress(): string {
