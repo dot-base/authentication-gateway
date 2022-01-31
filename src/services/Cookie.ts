@@ -30,7 +30,7 @@ export default class CookieService {
     const realm = RealmFactory.realm(realmName);
     const tokenIsValid = await KeycloakApi.validate(realm, tokens);
 
-    if (tokenIsValid) throw new Error("Access token is invalid.");
+    if (!tokenIsValid) throw new Error("Access token is invalid.");
 
     return realm;
   }
