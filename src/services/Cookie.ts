@@ -28,9 +28,9 @@ export default class CookieService {
     const tokens = CryptoService.decrypt(sessionCookie);
     const realmName = JwtUtil.getRealmName(tokens);
     const realm = RealmFactory.realm(realmName);
-    const tokenIsValid = await KeycloakApi.validate(realm, tokens);
+    const inspectedToken = await KeycloakApi.validate(realm, tokens);
 
-    if (!tokenIsValid) throw new Error("Access token is invalid.");
+    if (!inspectedToken.active) throw new Error("Access token is invalid.");
 
     return realm;
   }
