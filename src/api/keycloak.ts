@@ -2,6 +2,7 @@ import fetch, { BodyInit } from "node-fetch";
 
 import Tokens from "@/types/Tokens";
 import RealmConfig from "@/types/RealmConfig";
+import TokenIntrospection from "@/types/TokenIntrospection";
 
 export default abstract class KeycloakApi {
   private static get serverAddress(): string {
@@ -53,12 +54,12 @@ export default abstract class KeycloakApi {
         body: loginParams as unknown as BodyInit,
       }
     );
-    if (!response.ok) throw new Error("Unable to login.");
+    if (!response.ok) throw new Error("Unable to refresh token.");
 
     return response.json();
   }
 
-  public static async validate(realm: RealmConfig, tokens: Tokens): Promise<boolean> {
+  public static async validate(realm: RealmConfig, tokens: Tokens): Promise<TokenIntrospection> {
     const loginParams = new URLSearchParams();
     loginParams.append("client_id", realm.clientId);
     loginParams.append("client_secret", realm.clientSecret);
@@ -73,7 +74,7 @@ export default abstract class KeycloakApi {
     );
     if (!response.ok) throw new Error("Unable to validate token.");
 
-    return true;
+    return response.json();
   }
 
   public static async setupTOTP(realm: RealmConfig, username: string): Promise<string> {
