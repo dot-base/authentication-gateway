@@ -23,7 +23,7 @@ router.post("/device/:patientId", async (req, res) => {
   try {
     if (!req.body.deviceName) throw new Error("Request body is missing a deviceName.");
     if (!req.body.secret) throw new Error("Request body is missing a secret.");
-    if (!req.body.initialCode) throw new Error("Request body is missing a initialCode.");
+    if (!req.body.initialCode) throw new Error("Request body is missing an initialCode.");
 
     const totpConfig: TOTPConfig = {
       deviceName: req.body.deviceName,
