@@ -35,6 +35,14 @@ export default class CookieService {
     return realm;
   }
 
+
+  public static async invalidateSessionCookie(sessionCookie: string): Promise<void> {
+    const tokens = CryptoService.decrypt(sessionCookie);
+    const realmName = JwtUtil.getRealmName(tokens);
+    const realm = RealmFactory.realm(realmName);
+    await KeycloakApi.logout(realm, tokens.refresh_token);
+  }
+
   public static async getUserInfo(sessionCookie: string): Promise<UserInfo> {
     const tokens = CryptoService.decrypt(sessionCookie);
     return JwtUtil.getUserInfo(tokens);
