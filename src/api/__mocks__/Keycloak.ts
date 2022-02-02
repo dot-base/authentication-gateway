@@ -70,11 +70,13 @@ export default class KeycloakApi {
     realm: RealmConfig,
     username: string
   ): Promise<void> {
+    const isPatientRealm = realm.realmName === PatientRealm.realmName && username === "testpatient";
     const matchingConfig =
       totpConfig.deviceName === MockTOTPConfig.deviceName &&
       totpConfig.initialCode === MockTOTPConfig.initialCode &&
       totpConfig.secret === MockTOTPConfig.secret;
-    if (matchingConfig && realm.realmName === PatientRealm.realmName && username === "testpatient")
+
+    if (!matchingConfig || !isPatientRealm)
       throw new Error(`Unable to register device at keycloak server for OTP setup`);
   }
 }

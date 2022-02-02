@@ -6,8 +6,9 @@ import express from "@/express";
 jest.mock("@/api/keycloak");
 jest.mock("@/models/realms/RealmFactory");
 jest.mock("@/services/Cookie");
+jest.mock("@/services/OneTimePassword");
 
-@Describe("OneTimePassword endpoint - totp/qrcode/:patientId ")
+@Describe("OneTimePassword /qrcode/:patientId endpoint")
 export default class OneTimePasswordTestGroup {
   @Test("should respond with HTTP status 200 and a qrCode if a valid session cookie is submitted")
   private async testQRCodeValidSessionCookie() {
