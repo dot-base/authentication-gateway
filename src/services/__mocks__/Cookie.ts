@@ -3,6 +3,7 @@ import CryptoService from "@/services/__mocks__/Crypto";
 import JwtUtil from "@/utils/Jwt";
 import RealmConfig from "@/types/RealmConfig";
 import RealmFactory from "@/models/realms/__mocks__/RealmFactory";
+import UserInfo from "@/types/UserInfo";
 
 export default class CookieService {
   public static async createSessionCookie(
@@ -32,5 +33,10 @@ export default class CookieService {
     if (!inspectedToken.active) throw new Error("Access token is invalid.");
 
     return realm;
+  }
+
+  public static async getUserInfo(sessionCookie: string): Promise<UserInfo> {
+    const tokens = CryptoService.decrypt(sessionCookie);
+    return JwtUtil.getUserInfo(tokens);
   }
 }

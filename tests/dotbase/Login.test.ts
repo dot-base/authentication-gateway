@@ -17,8 +17,8 @@ export default class LoginTestGroup {
       .post("/api/auth/login/dotbase")
       .send({ username: "test", password: "test" })
       .set("Accept", "application/json")
-      .expect(200);
-    // .expect("set-cookie", /.*session=.*/);
+      .expect(200)
+      .expect("set-cookie", /.*session=.*/);
   }
 
   @Test("should respond with HTTP status 403 if invalid login credentials are submitted")
