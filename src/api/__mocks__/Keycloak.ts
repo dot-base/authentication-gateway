@@ -63,20 +63,16 @@ export default class KeycloakApi {
     const unknownRelamName = realm.realmName !== DotbaseRealm.realmName &&
     realm.realmName !== PatientRealm.realmName;
 
-    if (unknownRelamName)
-      throw new Error("Unable to validate token.");
-      
-    if (
-      realm.realmName === PatientRealm.realmName &&
-      invalidTokens
-    )
-      throw new Error("Unable to validate token.");
+    if (unknownRelamName) throw new Error("Unable to validate token.");
 
-    if (
-      realm.realmName === DotbaseRealm.realmName &&
-      invalidTokens
-    )
-      throw new Error("Unable to validate token.");
-    return MockTokenIntrospection.dotbaseRealm;
+    if (realm.realmName === PatientRealm.realmName && !invalidTokens)
+      return MockTokenIntrospection.patientRealm;
+
+    if (realm.realmName === DotbaseRealm.realmName && !invalidTokens)
+      return MockTokenIntrospection.dotbaseRealm;
+
+    return {
+      active: false,
+    };
   }
 }

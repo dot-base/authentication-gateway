@@ -1,13 +1,6 @@
 import RealmConfig from "@/types/RealmConfig";
 
 class PatientRealmModel implements RealmConfig {
-  private static _instance: PatientRealmModel;
-
-  public static get instance(): PatientRealmModel {
-    if (!this._instance) this._instance = new PatientRealmModel();
-    return this._instance;
-  }
-
   public get realmName(): string {
     return "patients";
   }

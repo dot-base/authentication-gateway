@@ -1,13 +1,6 @@
 import RealmConfig from "@/types/RealmConfig";
 
 class DotbaseRealmModel implements RealmConfig {
-  private static _instance: DotbaseRealmModel;
-
-  public static get instance(): DotbaseRealmModel {
-    if (!this._instance) this._instance = new DotbaseRealmModel();
-    return this._instance;
-  }
-
   public get realmName(): string {
     return "dotbase";
   }
