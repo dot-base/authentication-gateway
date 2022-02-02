@@ -11,6 +11,10 @@ router.use("/", async (req, res) => {
     const realm: RealmConfig = await CookieService.validateSessionCookie(req.cookies.session);
 
     res.setHeader("X-Auth-Realm", realm.realmName);
+
+    const userInfo = await CookieService.getUserInfo(req.cookies.session);
+    res.setHeader("X-Forwarded-User", userInfo.email)
+
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
