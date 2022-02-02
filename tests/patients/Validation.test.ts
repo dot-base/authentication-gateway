@@ -2,6 +2,7 @@ import { Describe, Test } from "jest-decorator";
 import request from "supertest";
 
 import express from "@/express";
+import MockTokenIntrospection from "@tests/__mocks__/TokenIntrospection";
 
 jest.mock("@/api/keycloak");
 jest.mock("@/models/realms/RealmFactory");
@@ -18,6 +19,10 @@ export default class ValidationTestGroup {
 
     const cookie = loginResponse.headers["set-cookie"][0];
 
-    await request(express).get("/api/auth/validate").set("Cookie", cookie).expect(200);
+    await request(express)
+      .get("/api/auth/validate")
+      .set("Cookie", cookie)
+      .expect(200)
+      .expect("X-Forwarded-User", MockTokenIntrospection.patientRealm.email ?? "");
   }
 }
