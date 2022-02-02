@@ -7,7 +7,7 @@ jest.mock("@/api/keycloak");
 jest.mock("@/models/realms/RealmFactory");
 jest.mock("@/services/Cookie");
 
-@Describe("Login endpoint")
+@Describe("Login endpoint /login/dotbase ")
 export default class LoginTestGroup {
   @Test(
     "should respond with HTTP status 200 and a session cookie if valid login credentials are submitted"

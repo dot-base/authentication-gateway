@@ -17,4 +17,5 @@ class PatientRealmModel implements RealmConfig {
     return "patient_realm_passphrase";
   }
 }
+
 export default new PatientRealmModel();

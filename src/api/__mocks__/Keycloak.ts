@@ -6,7 +6,6 @@ import DotbaseRealm from "@tests/__mocks__/DotbaseRealm";
 import TokenIntrospection from "@/types/TokenIntrospection";
 import MockTokenIntrospection from "@tests/__mocks__/TokenIntrospection";
 
-
 export default class KeycloakApi {
   public static async login(
     realm: RealmConfig,
@@ -14,61 +13,40 @@ export default class KeycloakApi {
     password: string
   ): Promise<Tokens> {
     const invalidCredentials = username !== "test" || password !== "test";
-    const unknownRelamName = realm.realmName !== DotbaseRealm.realmName &&
     realm.realmName !== PatientRealm.realmName;
 
-    if (unknownRelamName)
-      throw new Error("Unable to login.");
-      
-    if (
-      realm.realmName === PatientRealm.realmName &&
-      invalidCredentials
-    )
-      throw new Error("Unable to login.");
+    if (invalidCredentials) throw new Error("Unable to login.");
 
-    if (
-      realm.realmName === DotbaseRealm.realmName &&
-      invalidCredentials
-    )
-      throw new Error("Unable to login.");
+    if (realm.realmName === PatientRealm.realmName) return MockTockens.patientRealm;
 
-    return MockTockens.dotbaseRealm;
+    if (realm.realmName === DotbaseRealm.realmName) return MockTockens.dotbaseRealm;
+
+    throw new Error("Unable to login.");
   }
 
   public static async refresh(realm: RealmConfig, refreshToken: string): Promise<Tokens> {
-    const invalidRefreshToken = refreshToken !== MockTockens.dotbaseRealm.refresh_token;
-    const unknownRelamName = realm.realmName !== DotbaseRealm.realmName &&
-    realm.realmName !== PatientRealm.realmName;
+    const invalidRefreshToken =
+      refreshToken !== MockTockens.dotbaseRealm.refresh_token &&
+      refreshToken !== MockTockens.patientRealm.refresh_token;
 
-    if (unknownRelamName)
-      throw new Error("Unable to refresh token.");
-      
-    if (
-      realm.realmName === PatientRealm.realmName &&
-      invalidRefreshToken
-    )
-      throw new Error("Unable to refresh token.");
+    if (invalidRefreshToken) throw new Error("Unable to refresh token.");
 
-    if (
-      realm.realmName === DotbaseRealm.realmName &&
-      invalidRefreshToken
-    )
-      throw new Error("Unable to refresh token.");
+    if (realm.realmName === PatientRealm.realmName) return MockTockens.patientRealm;
 
-    return MockTockens.dotbaseRealm;
+    if (realm.realmName === DotbaseRealm.realmName) return MockTockens.dotbaseRealm;
+
+    throw new Error("Unable to refresh token.");
   }
 
   public static async validate(realm: RealmConfig, tokens: Tokens): Promise<TokenIntrospection> {
-    const invalidTokens = tokens.expires_in !== MockTockens.dotbaseRealm.expires_in;
-    const unknownRelamName = realm.realmName !== DotbaseRealm.realmName &&
-    realm.realmName !== PatientRealm.realmName;
+    const invalidTokens = tokens.access_token !== MockTockens.dotbaseRealm.access_token && tokens.access_token !== MockTockens.patientRealm.access_token;
 
-    if (unknownRelamName) throw new Error("Unable to validate token.");
+    if (invalidTokens) throw new Error("Unable to validate token.");
 
-    if (realm.realmName === PatientRealm.realmName && !invalidTokens)
+    if (realm.realmName === PatientRealm.realmName)
       return MockTokenIntrospection.patientRealm;
 
-    if (realm.realmName === DotbaseRealm.realmName && !invalidTokens)
+    if (realm.realmName === DotbaseRealm.realmName)
       return MockTokenIntrospection.dotbaseRealm;
 
     return {
