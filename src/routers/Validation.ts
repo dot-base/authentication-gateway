@@ -4,7 +4,7 @@ import RealmConfig from "@/types/RealmConfig";
 
 const router: express.Router = express.Router();
 
-router.use("/", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 

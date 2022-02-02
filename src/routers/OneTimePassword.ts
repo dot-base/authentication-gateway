@@ -4,7 +4,7 @@ import TOTPConfig from "@/types/TOTPConfig";
 
 const router: express.Router = express.Router();
 
-router.use("/setup/:patientId", async (req, res) => {
+router.get("/setup/:patientId", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
@@ -19,7 +19,7 @@ router.use("/setup/:patientId", async (req, res) => {
   }
 });
 
-router.use("/device/:patientId", async (req, res) => {
+router.post("/device/:patientId", async (req, res) => {
   try {
     if (!req.body.deviceName) throw new Error("Request body is missing a deviceName.");
     if (!req.body.secret) throw new Error("Request body is missing a secret.");
