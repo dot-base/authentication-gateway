@@ -1,10 +1,10 @@
 import RealmConfig from "@/types/RealmConfig";
 import Tokens from "@/types/Tokens";
-import mockTokens from "@tests/__mocks__/Tokens";
+import MockTockens from "@tests/__mocks__/Tokens";
 import PatientRealm from "@tests/__mocks__/PatientRealm";
 import DotbaseRealm from "@tests/__mocks__/DotbaseRealm";
 import TokenIntrospection from "@/types/TokenIntrospection";
-import mockIntrospection from "@tests/__mocks__/TokenIntrospection";
+import MockTokenIntrospection from "@tests/__mocks__/TokenIntrospection";
 
 
 export default class KeycloakApi {
@@ -32,11 +32,11 @@ export default class KeycloakApi {
     )
       throw new Error("Unable to login.");
 
-    return mockTokens;
+    return MockTockens.dotbaseRealm;
   }
 
   public static async refresh(realm: RealmConfig, refreshToken: string): Promise<Tokens> {
-    const invalidRefreshToken = refreshToken !== mockTokens.refresh_token;
+    const invalidRefreshToken = refreshToken !== MockTockens.dotbaseRealm.refresh_token;
     const unknownRelamName = realm.realmName !== DotbaseRealm.realmName &&
     realm.realmName !== PatientRealm.realmName;
 
@@ -55,11 +55,11 @@ export default class KeycloakApi {
     )
       throw new Error("Unable to refresh token.");
 
-    return mockTokens;
+    return MockTockens.dotbaseRealm;
   }
 
   public static async validate(realm: RealmConfig, tokens: Tokens): Promise<TokenIntrospection> {
-    const invalidTokens = tokens.expires_in !== mockTokens.expires_in;
+    const invalidTokens = tokens.expires_in !== MockTockens.dotbaseRealm.expires_in;
     const unknownRelamName = realm.realmName !== DotbaseRealm.realmName &&
     realm.realmName !== PatientRealm.realmName;
 
@@ -77,6 +77,6 @@ export default class KeycloakApi {
       invalidTokens
     )
       throw new Error("Unable to validate token.");
-    return mockIntrospection;
+    return MockTokenIntrospection.dotbaseRealm;
   }
 }
