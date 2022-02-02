@@ -7,7 +7,7 @@ jest.mock("@/api/keycloak");
 jest.mock("@/models/realms/RealmFactory");
 jest.mock("@/services/Cookie");
 
-@Describe("Renewal endpoint")
+@Describe("Renewal endpoint for a dotbase user")
 export default class RenewalTestGroup {
   @Test(
     "should respond with HTTP status 200 and a session cookie if a valid session cookie is submitted"
