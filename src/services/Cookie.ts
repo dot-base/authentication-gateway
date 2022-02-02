@@ -2,6 +2,7 @@ import KeycloakApi from "@/api/keycloak";
 import RealmFactory from "@/models/realms/RealmFactory";
 import CryptoService from "@/services/Crypto";
 import RealmConfig from "@/types/RealmConfig";
+import TokenIntrospection from "@/types/TokenIntrospection";
 import UserInfo from "@/types/UserInfo";
 import JwtUtil from "@/utils/Jwt";
 
@@ -24,7 +25,7 @@ export default class CookieService {
     return CryptoService.encrypt(realm, newTokens);
   }
 
-  public static async validateSessionCookie(sessionCookie: string): Promise<RealmConfig> {
+  public static async validateSessionCookie(sessionCookie: string): Promise<TokenIntrospection> {
     const tokens = CryptoService.decrypt(sessionCookie);
     const realmName = JwtUtil.getRealmName(tokens);
     const realm = RealmFactory.realm(realmName);
@@ -32,7 +33,7 @@ export default class CookieService {
 
     if (!inspectedToken.active) throw new Error("Access token is invalid.");
 
-    return realm;
+    return inspectedToken;
   }
 
   public static async invalidateSessionCookie(sessionCookie: string): Promise<void> {

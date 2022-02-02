@@ -1,6 +1,7 @@
 import express from "express";
 import CookieService from "@/services/Cookie";
-import RealmConfig from "@/types/RealmConfig";
+import TokenIntrospection from "@/types/TokenIntrospection";
+import JwtUtil from "@/utils/Jwt";
 
 const router: express.Router = express.Router();
 
@@ -8,12 +9,13 @@ router.use("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    const realm: RealmConfig = await CookieService.validateSessionCookie(req.cookies.session);
+    const inspectedToken: TokenIntrospection = await CookieService.validateSessionCookie(req.cookies.session);
 
-    res.setHeader("X-Auth-Realm", realm.realmName);
+    const realmName = JwtUtil.getTokenIssuerRealm(inspectedToken)
+    res.setHeader("X-Auth-Realm", realmName);
 
-    const userInfo = await CookieService.getUserInfo(req.cookies.session);
-    res.setHeader("X-Forwarded-User", userInfo.email)
+    const user = inspectedToken.email??inspectedToken.username??"";
+    res.setHeader("X-Forwarded-User", user)
 
     res.status(200).send();
 

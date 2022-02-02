@@ -2,6 +2,7 @@ import KeycloakApi from "@/api/__mocks__/Keycloak";
 import CookieService from "@/services/__mocks__/Cookie";
 import RealmFactory from "@/models/realms/__mocks__/RealmFactory";
 import TOTPConfig from "@/types/TOTPConfig";
+import JwtUtil from "@/utils/Jwt";
 
 export default class OneTimePassword {
   public static async getQrCode(sessionCookie: string, patientId: string): Promise<string> {
@@ -17,9 +18,10 @@ export default class OneTimePassword {
   }
 
   private static async validateAuthorization(sessionCookie: string): Promise<void> {
-    const realm = await CookieService.validateSessionCookie(sessionCookie);
+    const inspectedToken = await CookieService.validateSessionCookie(sessionCookie);
+    const tokenIssuer = JwtUtil.getTokenIssuerRealm(inspectedToken);
 
-    const isDotbaseUser = realm.realmName === "dotbase";
+    const isDotbaseUser = tokenIssuer === "dotbase";
     if (!isDotbaseUser) throw new Error("The user is not authorized to setup OTP.");
   }
 }
