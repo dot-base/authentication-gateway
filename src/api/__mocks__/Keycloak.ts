@@ -5,6 +5,9 @@ import PatientRealm from "@tests/__mocks__/PatientRealm";
 import DotbaseRealm from "@tests/__mocks__/DotbaseRealm";
 import TokenIntrospection from "@/types/TokenIntrospection";
 import MockTokenIntrospection from "@tests/__mocks__/TokenIntrospection";
+import qrCodeMock from "@tests/__mocks__/QRCode";
+import MockTOTPConfig from "@tests/__mocks__/TOTPConfig";
+import TOTPConfig from "@/types/TOTPConfig";
 
 export default class KeycloakApi {
   public static async login(
@@ -52,5 +55,26 @@ export default class KeycloakApi {
     return {
       active: false,
     };
+  }
+
+  public static async setupTOTP(realm: RealmConfig, username: string): Promise<string> {
+    const isPatientRealm = realm.realmName === PatientRealm.realmName && username === "testpatient";
+
+    if (!isPatientRealm) throw new Error(`Unable to fetch OTP setup from keycloak server.`);
+
+    return qrCodeMock;
+  }
+
+  public static async registerDevice(
+    totpConfig: TOTPConfig,
+    realm: RealmConfig,
+    username: string
+  ): Promise<void> {
+    const matchingConfig =
+      totpConfig.deviceName === MockTOTPConfig.deviceName &&
+      totpConfig.initialCode === MockTOTPConfig.initialCode &&
+      totpConfig.secret === MockTOTPConfig.secret;
+    if (matchingConfig && realm.realmName === PatientRealm.realmName && username === "testpatient")
+      throw new Error(`Unable to register device at keycloak server for OTP setup`);
   }
 }
