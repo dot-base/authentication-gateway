@@ -1,12 +1,18 @@
 import RealmConfig from "@/types/RealmConfig";
-import MockRealmModel from "@tests/__mocks__/mockRealm";
+import PatientRealmModel from "@tests/__mocks__/PatientRealm";
+import DotbaseRealmModel from "@tests/__mocks__/DotbaseRealm";
 
 export default abstract class RealmFactory {
-  public static realms = [MockRealmModel.instance];
+  public static realms = [PatientRealmModel, DotbaseRealmModel];
 
   public static realm(realmName: string): RealmConfig {
-    if (!MockRealmModel.instance.realmName)
-      throw new Error(`Keycloak realm with name ${realmName} is not defined.`);
-    return MockRealmModel.instance;
+    switch (realmName) {
+      case "dotbase":
+        return DotbaseRealmModel;
+      case "patients":
+        return PatientRealmModel;
+      default:
+        throw new Error(`Keycloak realm with name ${realmName} is not defined.`);
+    }
   }
 }

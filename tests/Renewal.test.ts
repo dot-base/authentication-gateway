@@ -14,14 +14,14 @@ export default class RenewalTestGroup {
   )
   private async testRenewValidSessionCookie() {
     const loginResponse = await request(express)
-      .post("/api/auth/login/testrealm")
+      .post("/api/auth/login/dotbase")
       .send({ username: "test", password: "test" })
       .set("Accept", "application/json");
 
     const cookie = loginResponse.headers["set-cookie"][0];
 
     await request(express)
-      .post("/api/auth/renew/testrealm")
+      .get("/api/auth/renew/dotbase")
       .set("Cookie", cookie)
       .expect(200)
       .expect("set-cookie", /.*session=.*/);
@@ -30,13 +30,13 @@ export default class RenewalTestGroup {
   @Test("should respond with HTTP status 403 if an invalid session cookie is submitted")
   private async testInvalidSessionCookie() {
     await request(express)
-      .post("/api/auth/renew/testrealm")
+      .get("/api/auth/renew/dotbase")
       .set("Cookie", "some-invalid-cookie-value")
       .expect(403);
   }
 
   @Test("should respond with HTTP status 403 if the session cookie is missing")
   private async testMissingSessionCookie() {
-    await request(express).post("/api/auth/renew/testrealm").expect(403);
+    await request(express).get("/api/auth/renew/dotbase").expect(403);
   }
 }

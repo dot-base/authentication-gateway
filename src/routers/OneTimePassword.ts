@@ -1,10 +1,9 @@
 import express from "express";
 import OTPService from "@/services/OneTimePassword";
 import TOTPConfig from "@/types/TOTPConfig";
-
 const router: express.Router = express.Router();
 
-router.get("/setup/:patientId", async (req, res) => {
+router.get("/qrcode/:patientId", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
