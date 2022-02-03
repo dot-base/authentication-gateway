@@ -30,14 +30,20 @@ export default class Server {
     app.use(Sentry.Handlers.errorHandler());
   }
 
+  private static setDefaultEnvironmentVariables() {
+    process.env.KEYCLOAK_DOTBASE_REALM_NAME = process.env.KEYCLOAK_DOTBASE_REALM_NAME ?? "dotbase";
+    process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_ID =
+      process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_ID ?? "authentication-gateway";
+
+    process.env.KEYCLOAK_PATIENT_REALM_NAME = process.env.KEYCLOAK_PATIENT_REALM_NAME ?? "patients";
+    process.env.KEYCLOAK_PATIENT_REALM_CLIENT_ID =
+      process.env.KEYCLOAK_PATIENT_REALM_CLIENT_ID ?? "authentication-gateway";
+  }
+
   private static validateEnvironmentVariables() {
     const requiredEnvVariables = [
-      "KEYCLOAK_DOTBASE_REALM_NAME",
-      "KEYCLOAK_DOTBASE_REALM_CLIENT_ID",
       "KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET",
       "DOTBASE_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES",
-      "KEYCLOAK_PATIENT_REALM_NAME",
-      "KEYCLOAK_PATIENT_REALM_CLIENT_ID",
       "KEYCLOAK_PATIENT_REALM_CLIENT_SECRET",
       "PATIENT_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES",
     ];
@@ -54,6 +60,7 @@ export default class Server {
   }
 
   private async startApiServer() {
+    Server.setDefaultEnvironmentVariables();
     Server.validateEnvironmentVariables();
 
     Server.enableSentry(express);

@@ -5,4 +5,5 @@ module.exports = {
       "^@/(.*)$": "<rootDir>/src/$1",  // map @ to absolute path,
       "^@tests/(.*)$": "<rootDir>/tests/$1"
     },
+    setupFiles: ["<rootDir>/tests/setEnvVars.js"]
 };

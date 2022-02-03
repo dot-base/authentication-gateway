@@ -1,6 +1,8 @@
-import KeycloakApi from "@/api/keycloak";
-import RealmFactory from "@/models/realms/RealmFactory";
+import KeycloakApi from "@/api/Keycloak";
+import RealmFactory from "@/models/RealmFactory";
 import CookieService from "@/services/Cookie";
+import TOTPConfig from "@/types/TOTPConfig";
+import JwtUtil from "@/utils/Jwt";
 
 export default class OneTimePassword {
   public static async getQrCode(sessionCookie: string, patientId: string): Promise<string> {
@@ -10,10 +12,16 @@ export default class OneTimePassword {
     return qrCode;
   }
 
-  public static async validateAuthorization(sessionCookie: string): Promise<void> {
-    const realm = await CookieService.validateSessionCookie(sessionCookie);
+  public static async registerDevice(totpConfig: TOTPConfig, patientId: string): Promise<void> {
+    const realm = RealmFactory.realm(process.env.KEYCLOAK_PATIENT_REALM_NAME);
+    await KeycloakApi.registerDevice(totpConfig, realm, patientId);
+  }
 
-    const isDotbaseUser = realm.realmName === process.env.KEYCLOAK_DOTBASE_REALM_NAME;
-    if (!isDotbaseUser) throw new Error("User not authorized to setup OTP.");
+  private static async validateAuthorization(sessionCookie: string): Promise<void> {
+    const inspectedToken = await CookieService.validateSessionCookie(sessionCookie);
+    const tokenIssuer = JwtUtil.getTokenIssuerRealm(inspectedToken);
+
+    const isDotbaseUser = tokenIssuer === process.env.KEYCLOAK_DOTBASE_REALM_NAME;
+    if (!isDotbaseUser) throw new Error("The user is not authorized to setup OTP.");
   }
 }
