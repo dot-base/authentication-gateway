@@ -9,6 +9,7 @@ jest.mock("@/services/Cookie");
 
 @Describe("Login endpoint for a dotbase user")
 export default class LoginTestGroup {
+  
   @Test(
     "should respond with HTTP status 200 and a session cookie if valid login credentials are submitted"
   )

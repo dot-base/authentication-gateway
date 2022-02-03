@@ -6,13 +6,12 @@ import express from "@/express";
 jest.mock("@/api/keycloak");
 jest.mock("@/models/realms/RealmFactory");
 jest.mock("@/services/Cookie");
+jest.mock("@/services/OneTimePassword");
 
-@Describe("UserInfo endpoint for a dotbase user")
-export default class UserInfoTestGroup {
-  @Test(
-    "should respond with HTTP status 200 and a userinfo json if a valid session cookie is submitted"
-  )
-  private async testUserInfoValidSessionCookie() {
+@Describe("OneTimePassword /qrcode/:patientId endpoint")
+export default class OneTimePasswordTestGroup {
+  @Test("should respond with HTTP status 200 and a qrCode if a valid session cookie is submitted")
+  private async testQRCodeValidSessionCookie() {
     const loginResponse = await request(express)
       .post("/api/auth/login/dotbase")
       .send({ username: "test", password: "test" })
@@ -20,20 +19,23 @@ export default class UserInfoTestGroup {
 
     const cookie = loginResponse.headers["set-cookie"][0];
 
-    const res = await request(express).get("/api/auth/userinfo").set("Cookie", cookie).expect(200);
-    expect(res.body).toHaveProperty("preferred_username");
+    const res = await request(express)
+      .get("/api/auth/totp/qrcode/testpatient")
+      .set("Cookie", cookie)
+      .expect(200);
+    expect(res.body).toHaveProperty("qrCode");
   }
 
   @Test("should respond with HTTP status 403 if an invalid session cookie is submitted")
-  private async testUserInfoInvalidSessionCookie() {
+  private async testQRCodeInvalidSessionCookie() {
     await request(express)
-      .get("/api/auth/userinfo")
+      .get("/api/auth/totp/qrcode/testpatient")
       .set("Cookie", "some-invalid-cookie-value")
       .expect(403);
   }
 
   @Test("should respond with HTTP status 403 if the session cookie is missing")
-  private async testUserInfoMissingSessionCookie() {
-    await request(express).get("/api/auth/userinfo").expect(403);
+  private async testQRCodeMissingSessionCookie() {
+    await request(express).get("/api/auth/totp/qrcode/test").expect(403);
   }
 }
