@@ -45,6 +45,8 @@ export default class CookieService {
 
   public static async getUserInfo(sessionCookie: string): Promise<UserInfo> {
     const tokens = CryptoService.decrypt(sessionCookie);
-    return JwtUtil.getUserInfo(tokens);
+    const realmName = JwtUtil.getRealmName(tokens);
+    const realm = RealmFactory.realm(realmName);
+    return await KeycloakApi.userInfo(realm, tokens);
   }
 }

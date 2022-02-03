@@ -4,6 +4,7 @@ import Tokens from "@/types/Tokens";
 import RealmConfig from "@/types/RealmConfig";
 import TokenIntrospection from "@/types/TokenIntrospection";
 import TOTPConfig from "@/types/TOTPConfig";
+import UserInfo from "@/types/UserInfo";
 
 export default abstract class KeycloakApi {
   private static get serverAddress(): string {
@@ -102,6 +103,21 @@ export default abstract class KeycloakApi {
       {
         method: "POST",
         body: loginParams as unknown as BodyInit,
+      }
+    );
+    if (!response.ok) throw new Error("Unable to validate token.");
+
+    return response.json();
+  }
+
+  public static async userInfo(realm: RealmConfig, tokens: Tokens): Promise<UserInfo> {
+    const response = await fetch(
+      `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/userinfo`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${tokens.access_token}`,
+        },
       }
     );
     if (!response.ok) throw new Error("Unable to validate token.");

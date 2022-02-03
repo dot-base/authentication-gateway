@@ -1,4 +1,5 @@
 export default interface UserInfo {
+  sub?: string;
   preferred_username: string;
   name?: string;
   family_name?: string;
