@@ -12,7 +12,7 @@ router.post("/:realmName", async (req, res) => {
     const sessionCookie = await CookieService.renewSessionCookie(realm, req.cookies.session);
 
     res.cookie("session", sessionCookie, {
-      expires: new Date(Date.now() + 900000),
+      expires: new Date(Date.now() + 2700000),
       httpOnly: true,
     });
     res.status(200).send();

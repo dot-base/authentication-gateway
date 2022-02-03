@@ -17,7 +17,7 @@ router.post("/:realmName", async (req, res) => {
     );
 
     res.cookie("session", sessionCookie, {
-      expires: new Date(Date.now() + 900000),
+      expires: new Date(Date.now() + 2700000),
       httpOnly: true,
     });
     res.status(200).send();
