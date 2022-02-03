@@ -35,9 +35,9 @@ export default class Server {
     process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_ID =
       process.env.KEYCLOAK_DOTBASE_REALM_CLIENT_ID ?? "authentication-gateway";
 
-    process.env.KEYCLOAK_PATIENT_REALM_NAME = process.env.KEYCLOAK_PATIENT_REALM_NAME = "patients";
-    process.env.KEYCLOAK_PATIENT_REALM_CLIENT_ID = process.env.KEYCLOAK_PATIENT_REALM_CLIENT_ID =
-      "authentication-gateway";
+    process.env.KEYCLOAK_PATIENT_REALM_NAME = process.env.KEYCLOAK_PATIENT_REALM_NAME ?? "patients";
+    process.env.KEYCLOAK_PATIENT_REALM_CLIENT_ID =
+      process.env.KEYCLOAK_PATIENT_REALM_CLIENT_ID ?? "authentication-gateway";
   }
 
   private static validateEnvironmentVariables() {
