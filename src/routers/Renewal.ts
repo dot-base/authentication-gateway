@@ -1,6 +1,6 @@
 import express from "express";
 import CookieService from "@/services/Cookie";
-import RealmFactory from "@/models/realms/RealmFactory";
+import RealmFactory from "@/models/RealmFactory";
 
 const router: express.Router = express.Router();
 
@@ -12,14 +12,14 @@ router.post("/:realmName", async (req, res) => {
     const sessionCookie = await CookieService.renewSessionCookie(realm, req.cookies.session);
 
     res.cookie("session", sessionCookie, {
-      expires: new Date(Date.now() + 900000),
+      expires: new Date(Date.now() + 2700000),
       httpOnly: true,
     });
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    res.status(403).send(e.message);
+    res.status(401).send(e.message);
     return;
   }
 });

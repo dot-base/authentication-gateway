@@ -19,7 +19,7 @@ export default class KeycloakApi {
   ): Promise<Tokens> {
     const invalidCredentials = username !== "test" || password !== "test";
     realm.realmName !== PatientRealm.realmName;
-    
+
     if (invalidCredentials) throw new Error("Unable to login.");
 
     if (realm.realmName === PatientRealm.realmName) return MockTockens.patientRealm;

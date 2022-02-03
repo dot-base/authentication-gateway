@@ -23,16 +23,16 @@ export default class OneTimePasswordTestGroup {
     expect(res.body).toHaveProperty("qrCode");
   }
 
-  @Test("should respond with HTTP status 403 if an invalid session cookie is submitted")
+  @Test("should respond with HTTP status 401 if an invalid session cookie is submitted")
   private async testQRCodeInvalidSessionCookie() {
     await request(express)
       .get("/api/auth/totp/qrcode/testpatient")
       .set("Cookie", "some-invalid-cookie-value")
-      .expect(403);
+      .expect(401);
   }
 
-  @Test("should respond with HTTP status 403 if the session cookie is missing")
+  @Test("should respond with HTTP status 401 if the session cookie is missing")
   private async testQRCodeMissingSessionCookie() {
-    await request(express).get("/api/auth/totp/qrcode/test").expect(403);
+    await request(express).get("/api/auth/totp/qrcode/test").expect(401);
   }
 }

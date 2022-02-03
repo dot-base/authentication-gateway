@@ -24,16 +24,16 @@ export default class ValidationTestGroup {
       .expect("X-Forwarded-User", MockTokenIntrospection.dotbaseRealm.email ?? "");
   }
 
-  @Test("should respond with HTTP status 403 if an invalid session cookie is submitted")
+  @Test("should respond with HTTP status 401 if an invalid session cookie is submitted")
   private async testInvalidSessionCookie() {
     await request(express)
       .get("/api/auth/validate")
       .set("Cookie", "some-invalid-cookie-value")
-      .expect(403);
+      .expect(401);
   }
 
-  @Test("should respond with HTTP status 403 if the session cookie is missing")
+  @Test("should respond with HTTP status 401 if the session cookie is missing")
   private async testMissingSessionCookie() {
-    await request(express).get("/api/auth/validate").expect(403);
+    await request(express).get("/api/auth/validate").expect(401);
   }
 }

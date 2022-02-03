@@ -18,43 +18,43 @@ export default class DeviceTestGroup {
     expect(res.body).toBeNull;
   }
 
-  @Test("should respond with HTTP status 403 if an invalid initialCode is submitted")
+  @Test("should respond with HTTP status 401 if an invalid initialCode is submitted")
   private async testInvalidInitialCode() {
     await request(express)
       .post("/api/auth/totp/device/testpatient")
       .send({ deviceName: "test-device", initialCode: "654321", secret: "123-456-789" })
-      .expect(403);
+      .expect(401);
   }
 
-  @Test("should respond with HTTP status 403 if an invalid secret is submitted")
+  @Test("should respond with HTTP status 401 if an invalid secret is submitted")
   private async testInvalidSecret() {
     await request(express)
       .post("/api/auth/totp/device/testpatient")
       .send({ deviceName: "test-device", initialCode: "123456", secret: "987-654-321" })
-      .expect(403);
+      .expect(401);
   }
 
-  @Test("should respond with HTTP status 403 if no deviceName is submitted")
+  @Test("should respond with HTTP status 401 if no deviceName is submitted")
   private async testNoDeviceName() {
     await request(express)
       .post("/api/auth/totp/device/testpatient")
       .send({ initialCode: "123456", secret: "123-456-789" })
-      .expect(403);
+      .expect(401);
   }
 
-  @Test("should respond with HTTP status 403 if no initialCode is submitted.")
+  @Test("should respond with HTTP status 401 if no initialCode is submitted.")
   private async testNoInitialCode() {
     await request(express)
       .post("/api/auth/totp/device/testpatient")
       .send({ deviceName: "test-device", secret: "123-456-789" })
-      .expect(403);
+      .expect(401);
   }
 
-  @Test("should respond with HTTP status 403 if no secret is submitted.")
+  @Test("should respond with HTTP status 401 if no secret is submitted.")
   private async testNoSecret() {
     await request(express)
       .post("/api/auth/totp/device/testpatient")
       .send({ deviceName: "test-device", initialCode: "123456" })
-      .expect(403);
+      .expect(401);
   }
 }
