@@ -10,6 +10,25 @@ export default abstract class KeycloakApi {
     return process.env.KEYCLOAK_SERVER_ADDRESS ?? "http://keycloak:8080";
   }
 
+  private static loginParams(
+    realm: RealmConfig,
+    username: string,
+    password: string
+  ): URLSearchParams {
+    const loginParams = new URLSearchParams();
+    loginParams.append("client_id", realm.clientId);
+    loginParams.append("client_secret", realm.clientSecret);
+    loginParams.append("grant_type", "password");
+    loginParams.append("username", username);
+
+    if (realm.realmName === process.env.KEYCLOAK_PATIENT_REALM_NAME) {
+      loginParams.append("otp", password);
+    } else {
+      loginParams.append("password", password);
+    }
+    return loginParams;
+  }
+
   public static get baseUrl(): string {
     const hostname =
       process.env.NODE_ENV === "development"
@@ -24,13 +43,7 @@ export default abstract class KeycloakApi {
     username: string,
     password: string
   ): Promise<Tokens> {
-    const loginParams = new URLSearchParams();
-    loginParams.append("client_id", realm.clientId);
-    loginParams.append("client_secret", realm.clientSecret);
-    loginParams.append("grant_type", "password");
-    loginParams.append("username", username);
-    loginParams.append("password", password);
-
+    const loginParams = this.loginParams(realm, username, password);
     const response = await fetch(
       `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/token`,
       {
