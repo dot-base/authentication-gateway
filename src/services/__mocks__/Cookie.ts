@@ -1,9 +1,9 @@
-import KeycloakApi from "@/api/__mocks__/keycloak";
-import mockTokens from "@tests/__mocks__/tokens";
+import KeycloakApi from "@/api/__mocks__/Keycloak";
 import CryptoService from "@/services/__mocks__/Crypto";
 import JwtUtil from "@/utils/Jwt";
 import RealmConfig from "@/types/RealmConfig";
 import RealmFactory from "@/models/realms/__mocks__/RealmFactory";
+import UserInfo from "@/types/UserInfo";
 
 export default class CookieService {
   public static async createSessionCookie(
@@ -28,10 +28,15 @@ export default class CookieService {
     const tokens = CryptoService.decrypt(sessionCookie);
     const realmName = JwtUtil.getRealmName(tokens);
     const realm = RealmFactory.realm(realmName);
+    const inspectedToken = await KeycloakApi.validate(realm, tokens);
 
-    if (mockTokens.access_token !== tokens.access_token)
-      throw new Error("Access token is invalid.");
+    if (!inspectedToken.active) throw new Error("Access token is invalid.");
 
     return realm;
+  }
+
+  public static async getUserInfo(sessionCookie: string): Promise<UserInfo> {
+    const tokens = CryptoService.decrypt(sessionCookie);
+    return JwtUtil.getUserInfo(tokens);
   }
 }

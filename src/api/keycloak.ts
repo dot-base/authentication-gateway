@@ -3,6 +3,7 @@ import fetch, { BodyInit } from "node-fetch";
 import Tokens from "@/types/Tokens";
 import RealmConfig from "@/types/RealmConfig";
 import TokenIntrospection from "@/types/TokenIntrospection";
+import TOTPConfig from "@/types/TOTPConfig";
 
 export default abstract class KeycloakApi {
   private static get serverAddress(): string {
@@ -11,7 +12,9 @@ export default abstract class KeycloakApi {
 
   public static get baseUrl(): string {
     const hostname =
-      process.env.NODE_ENV === "development" ? "http://127.0.0.1:8080" : this.serverAddress;
+      process.env.NODE_ENV === "development"
+        ? "https://sso.beta.movebase.charite.de"
+        : this.serverAddress;
 
     return new URL(`/auth/realms`, hostname).toString();
   }
@@ -86,5 +89,24 @@ export default abstract class KeycloakApi {
       );
 
     return await response.text();
+  }
+
+  public static async registerDevice(
+    totpConfig: TOTPConfig,
+    realm: RealmConfig,
+    username: string
+  ): Promise<void> {
+    const response = await fetch(`${this.baseUrl}/${realm.realmName}/totp/device/${username}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(totpConfig),
+    });
+
+    if (!response.ok)
+      throw new Error(
+        `Unable to register device at keycloak server for OTP setup. Server responded with HTTP ${response.status}.`
+      );
   }
 }

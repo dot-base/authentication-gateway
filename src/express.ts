@@ -16,6 +16,6 @@ app.use("/api/auth/login", LoginRouter);
 app.use("/api/auth/validate", ValidationRouter);
 app.use("/api/auth/renew", RenewalRouter);
 app.use("/api/auth/userinfo", UserInfoRouter);
-app.use("/api/auth/totp/setup", OTPRouter);
+app.use("/api/auth/totp", OTPRouter);
 
 export default app;
