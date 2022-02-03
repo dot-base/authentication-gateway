@@ -19,7 +19,7 @@ router.post("/:realmName", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    res.status(403).send(e.message);
+    res.status(401).send(e.message);
     return;
   }
 });
