@@ -120,7 +120,7 @@ export default abstract class KeycloakApi {
         },
       }
     );
-    if (!response.ok) throw new Error("Unable to validate token.");
+    if (!response.ok) throw new Error("Unable to get userinfo.");
 
     return response.json();
   }

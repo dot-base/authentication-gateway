@@ -4,9 +4,7 @@ import request from "supertest";
 import express from "@/express";
 import MockTokenIntrospection from "@tests/__mocks__/TokenIntrospection";
 
-jest.mock("@/api/keycloak");
-jest.mock("@/models/realms/RealmFactory");
-jest.mock("@/services/Cookie");
+jest.mock("@/api/Keycloak");
 
 @Describe("Validation endpoint for a patient user")
 export default class ValidationTestGroup {

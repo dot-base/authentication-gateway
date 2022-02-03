@@ -1,4 +1,4 @@
-import KeycloakApi from "@/api/keycloak";
+import KeycloakApi from "@/api/Keycloak";
 import RealmFactory from "@/models/realms/RealmFactory";
 import CryptoService from "@/services/Crypto";
 import RealmConfig from "@/types/RealmConfig";

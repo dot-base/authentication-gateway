@@ -1,4 +1,4 @@
-import KeycloakApi from "@/api/keycloak";
+import KeycloakApi from "@/api/Keycloak";
 import RealmFactory from "@/models/realms/RealmFactory";
 import CookieService from "@/services/Cookie";
 import TOTPConfig from "@/types/TOTPConfig";
