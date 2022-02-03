@@ -18,7 +18,7 @@
       "@tests/*": ["tests/*"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "tests/setEnvVars.js"],
   "exclude": ["node_modules"],
   "ts-node": {
     "files": true

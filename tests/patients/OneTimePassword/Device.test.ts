@@ -3,14 +3,13 @@ import request from "supertest";
 
 import express from "@/express";
 
-jest.mock("@/api/keycloak");
-jest.mock("@/models/realms/RealmFactory");
-jest.mock("@/services/Cookie");
-jest.mock("@/services/OneTimePassword");
+jest.mock("@/api/Keycloak");
 
 @Describe("OneTimePassword /device/:patientId endpoint")
 export default class DeviceTestGroup {
-  @Test("should respond with HTTP status 200 if a valid request with totp config parameters is submitted")
+  @Test(
+    "should respond with HTTP status 200 if a valid request with totp config parameters is submitted"
+  )
   private async testDeviceValidRequest() {
     const res = await request(express)
       .post("/api/auth/totp/device/testpatient")

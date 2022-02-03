@@ -3,9 +3,7 @@ import request from "supertest";
 
 import express from "@/express";
 
-jest.mock("@/api/keycloak");
-jest.mock("@/models/realms/RealmFactory");
-jest.mock("@/services/Cookie");
+jest.mock("@/api/Keycloak");
 
 @Describe("Renewal endpoint for a dotbase user")
 export default class RenewalTestGroup {
