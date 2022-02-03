@@ -27,6 +27,13 @@ export default class KeycloakApi {
     throw new Error("Unable to login.");
   }
 
+
+  public static async logout(realm: RealmConfig, refreshToken: string): Promise<void> {
+    const invalidToken = refreshToken !== MockTockens.dotbaseRealm.refresh_token && refreshToken !== MockTockens.patientRealm.refresh_token;
+
+    if (invalidToken) throw new Error("Unable to logout.");
+  }
+
   public static async refresh(realm: RealmConfig, refreshToken: string): Promise<Tokens> {
     const invalidRefreshToken =
       refreshToken !== MockTockens.dotbaseRealm.refresh_token &&

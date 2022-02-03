@@ -56,6 +56,22 @@ export default abstract class KeycloakApi {
     return response.json();
   }
 
+  public static async logout(realm: RealmConfig, refreshToken: string): Promise<void> {
+    const logoutParams = new URLSearchParams();
+    logoutParams.append("client_id", realm.clientId);
+    logoutParams.append("client_secret", realm.clientSecret);
+    logoutParams.append("refresh_token", refreshToken);
+
+    const response = await fetch(
+      `${this.baseUrl}/${realm.realmName}/protocol/openid-connect/logout`,
+      {
+        method: "POST",
+        body: logoutParams as unknown as BodyInit,
+      }
+    );
+    if (!response.ok) throw new Error("Unable to logout.");
+  }
+
   public static async refresh(realm: RealmConfig, refreshToken: string): Promise<Tokens> {
     const loginParams = new URLSearchParams();
     loginParams.append("client_id", realm.clientId);
