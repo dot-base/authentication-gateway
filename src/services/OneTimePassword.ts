@@ -1,5 +1,5 @@
 import KeycloakApi from "@/api/Keycloak";
-import RealmFactory from "@/models/realms/RealmFactory";
+import RealmFactory from "@/models/RealmFactory";
 import CookieService from "@/services/Cookie";
 import TOTPConfig from "@/types/TOTPConfig";
 import JwtUtil from "@/utils/Jwt";

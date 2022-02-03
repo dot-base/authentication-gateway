@@ -1,5 +1,5 @@
 import KeycloakApi from "@/api/Keycloak";
-import RealmFactory from "@/models/realms/RealmFactory";
+import RealmFactory from "@/models/RealmFactory";
 import CryptoService from "@/services/Crypto";
 import RealmConfig from "@/types/RealmConfig";
 import TokenIntrospection from "@/types/TokenIntrospection";

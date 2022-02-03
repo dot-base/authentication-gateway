@@ -1,6 +1,6 @@
 import express from "express";
 import CookieService from "@/services/Cookie";
-import RealmFactory from "@/models/realms/RealmFactory";
+import RealmFactory from "@/models/RealmFactory";
 
 const router: express.Router = express.Router();
 
