@@ -4,7 +4,7 @@ import RealmFactory from "@/models/realms/RealmFactory";
 
 const router: express.Router = express.Router();
 
-router.get("/:realmName", async (req, res) => {
+router.post("/:realmName", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
