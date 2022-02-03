@@ -20,10 +20,7 @@ export default class UserInfoTestGroup {
 
     const cookie = loginResponse.headers["set-cookie"][0];
 
-    const res = await request(express)
-      .get("/api/auth/userinfo")
-      .set("Cookie", cookie)
-      .expect(200);
-    expect(res.body).toHaveProperty("preferred_username")
+    const res = await request(express).get("/api/auth/userinfo").set("Cookie", cookie).expect(200);
+    expect(res.body).toHaveProperty("preferred_username");
   }
 }

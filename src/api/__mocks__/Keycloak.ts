@@ -49,15 +49,15 @@ export default class KeycloakApi {
   }
 
   public static async validate(realm: RealmConfig, tokens: Tokens): Promise<TokenIntrospection> {
-    const invalidTokens = tokens.access_token !== MockTockens.dotbaseRealm.access_token && tokens.access_token !== MockTockens.patientRealm.access_token;
+    const invalidTokens =
+      tokens.access_token !== MockTockens.dotbaseRealm.access_token &&
+      tokens.access_token !== MockTockens.patientRealm.access_token;
 
     if (invalidTokens) throw new Error("Unable to validate token.");
 
-    if (realm.realmName === PatientRealm.realmName)
-      return MockTokenIntrospection.patientRealm;
+    if (realm.realmName === PatientRealm.realmName) return MockTokenIntrospection.patientRealm;
 
-    if (realm.realmName === DotbaseRealm.realmName)
-      return MockTokenIntrospection.dotbaseRealm;
+    if (realm.realmName === DotbaseRealm.realmName) return MockTokenIntrospection.dotbaseRealm;
 
     return {
       active: false,
