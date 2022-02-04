@@ -1,19 +1,30 @@
 import KeycloakApi from "@/api/Keycloak";
 import RealmFactory from "@/models/RealmFactory";
 import CryptoService from "@/services/Crypto";
+import Cookie from "@/types/Cookie";
 import RealmConfig from "@/types/RealmConfig";
 import TokenIntrospection from "@/types/TokenIntrospection";
+import Tokens from "@/types/Tokens";
 import UserInfo from "@/types/UserInfo";
 import JwtUtil from "@/utils/Jwt";
 
 export default class CookieService {
+  private static createCookieFromToken(realm: RealmConfig, tokens: Tokens) {
+    return {
+      value: CryptoService.encrypt(realm, tokens),
+      options: {
+        expires: new Date(Date.now() + tokens.refresh_expires_in),
+        httpOnly: true,
+      },
+    };
+  }
   public static async createSessionCookie(
     realm: RealmConfig,
     username: string,
     password: string
-  ): Promise<string> {
+  ): Promise<Cookie> {
     const tokens = await KeycloakApi.login(realm, username, password);
-    return CryptoService.encrypt(realm, tokens);
+    return this.createCookieFromToken(realm, tokens);
   }
 
   public static async validateCookieExpiration(sessionCookie: string): Promise<boolean> {
@@ -32,13 +43,13 @@ export default class CookieService {
     return inspectedToken;
   }
 
-  public static async renewSessionCookie(sessionCookie: string): Promise<string> {
+  public static async renewSessionCookie(sessionCookie: string): Promise<Cookie> {
     const tokens = CryptoService.decrypt(sessionCookie);
     const realmName = JwtUtil.getRealmName(tokens);
     const realm = RealmFactory.realm(realmName);
 
     const newTokens = await KeycloakApi.refresh(realm, tokens.refresh_token);
-    return CryptoService.encrypt(realm, newTokens);
+    return this.createCookieFromToken(realm, newTokens);
   }
 
   public static async invalidateSessionCookie(sessionCookie: string): Promise<void> {
