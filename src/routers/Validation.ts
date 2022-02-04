@@ -9,15 +9,28 @@ router.use("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    const inspectedToken: TokenIntrospection = await CookieService.validateSessionCookie(
-      req.cookies.session
-    );
+    const isExpired = await CookieService.validateCookieExpiration(req.cookies.session);
 
-    const realmName = JwtUtil.getTokenIssuerRealm(inspectedToken);
-    res.setHeader("X-Auth-Realm", realmName);
+    if (isExpired) {
+      const sessionCookie = await CookieService.renewSessionCookie(req.cookies.session);
 
-    const user = inspectedToken.email ?? inspectedToken.username ?? "";
-    res.setHeader("X-Forwarded-User", user);
+      res.cookie("session", sessionCookie, {
+        expires: new Date(Date.now() + 2700000),
+        httpOnly: true,
+      });
+    }
+
+    if (!isExpired) {
+      const inspectedToken: TokenIntrospection = await CookieService.validateSessionCookie(
+        req.cookies.session
+      );
+
+      const realmName = JwtUtil.getTokenIssuerRealm(inspectedToken);
+      res.setHeader("X-Auth-Realm", realmName);
+
+      const user = inspectedToken.email ?? inspectedToken.username ?? "";
+      res.setHeader("X-Forwarded-User", user);
+    }
 
     res.status(200).send();
 

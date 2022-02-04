@@ -16,24 +16,29 @@ export default class CookieService {
     return CryptoService.encrypt(realm, tokens);
   }
 
-  public static async renewSessionCookie(
-    realm: RealmConfig,
-    sessionCookie: string
-  ): Promise<string> {
+  public static async validateCookieExpiration(sessionCookie: string): Promise<boolean> {
     const tokens = CryptoService.decrypt(sessionCookie);
-    const newTokens = await KeycloakApi.refresh(realm, tokens.refresh_token);
-    return CryptoService.encrypt(realm, newTokens);
+    return JwtUtil.isExpired(tokens.access_token);
   }
 
   public static async validateSessionCookie(sessionCookie: string): Promise<TokenIntrospection> {
     const tokens = CryptoService.decrypt(sessionCookie);
     const realmName = JwtUtil.getRealmName(tokens);
     const realm = RealmFactory.realm(realmName);
-    const inspectedToken = await KeycloakApi.validate(realm, tokens);
 
+    const inspectedToken = await KeycloakApi.validate(realm, tokens);
     if (!inspectedToken.active) throw new Error("Access token is invalid.");
 
     return inspectedToken;
+  }
+
+  public static async renewSessionCookie(sessionCookie: string): Promise<string> {
+    const tokens = CryptoService.decrypt(sessionCookie);
+    const realmName = JwtUtil.getRealmName(tokens);
+    const realm = RealmFactory.realm(realmName);
+
+    const newTokens = await KeycloakApi.refresh(realm, tokens.refresh_token);
+    return CryptoService.encrypt(realm, newTokens);
   }
 
   public static async invalidateSessionCookie(sessionCookie: string): Promise<void> {
