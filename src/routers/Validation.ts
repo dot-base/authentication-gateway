@@ -31,9 +31,8 @@ router.use("/", async (req, res) => {
 
       const user = inspectedToken.email ?? inspectedToken.username ?? "";
       res.setHeader("X-Forwarded-User", user);
+      res.status(200).send();
     }
-
-    res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {

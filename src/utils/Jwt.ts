@@ -27,6 +27,6 @@ export default class JwtUtil {
 
     if (!expireTime) return true;
 
-    return new Date(expireTime).toISOString() < new Date().toISOString();
+    return new Date(expireTime * 1000).toISOString() < new Date().toISOString();
   }
 }

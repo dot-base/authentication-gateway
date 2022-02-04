@@ -13,7 +13,7 @@ export default class CookieService {
     return {
       value: CryptoService.encrypt(realm, tokens),
       options: {
-        expires: new Date(Date.now() + tokens.refresh_expires_in),
+        expires: new Date(Date.now() + tokens.refresh_expires_in * 1000),
         httpOnly: true,
       },
     };
