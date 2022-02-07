@@ -32,9 +32,7 @@ export default abstract class KeycloakApi {
 
   public static get baseUrl(): string {
     const hostname =
-      process.env.NODE_ENV === "development"
-        ? "https://sso.beta.movebase.charite.de"
-        : this.serverAddress;
+      process.env.NODE_ENV === "development" ? "http://127.0.0.1:8080" : this.serverAddress;
 
     return new URL(`/auth/realms`, hostname).toString();
   }

@@ -1,7 +1,7 @@
 {
   "name": "authentication-gateway",
   "description": "Traefik forward auth implementation to validate jwt tokens.",
-  "version": "0.0.1",
+  "version": "4.0.0",
   "private": true,
   "engines": {
     "node": ">=16 <17"

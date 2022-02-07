@@ -9,17 +9,30 @@ router.use("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
 
-    const inspectedToken: TokenIntrospection = await CookieService.validateSessionCookie(
-      req.cookies.session
-    );
+    const isExpired = await CookieService.validateCookieExpiration(req.cookies.session);
 
-    const realmName = JwtUtil.getTokenIssuerRealm(inspectedToken);
-    res.setHeader("X-Auth-Realm", realmName);
+    if (isExpired) {
+      if (!req.headers["x-forwarded-uri"]) throw new Error("Request is missing a x-forwarded-uri header.");
 
-    const user = inspectedToken.email ?? inspectedToken.username ?? "";
-    res.setHeader("X-Forwarded-User", user);
+      const sessionCookie = await CookieService.renewSessionCookie(req.cookies.session);
 
-    res.status(200).send();
+      res.cookie("session", sessionCookie.value, sessionCookie.options);
+      res.setHeader("Location", req.headers["x-forwarded-uri"]);
+      res.status(307).send();
+    }
+
+    if (!isExpired) {
+      const inspectedToken: TokenIntrospection = await CookieService.validateSessionCookie(
+        req.cookies.session
+      );
+
+      const realmName = JwtUtil.getTokenIssuerRealm(inspectedToken);
+      res.setHeader("X-Auth-Realm", realmName);
+
+      const user = inspectedToken.email ?? inspectedToken.username ?? "";
+      res.setHeader("X-Forwarded-User", user);
+      res.status(200).send();
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {

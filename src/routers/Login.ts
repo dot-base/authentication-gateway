@@ -16,10 +16,7 @@ router.post("/:realmName", async (req, res) => {
       req.body.password
     );
 
-    res.cookie("session", sessionCookie, {
-      expires: new Date(Date.now() + 2700000),
-      httpOnly: true,
-    });
+    res.cookie("session", sessionCookie.value, sessionCookie.options);
     res.status(200).send();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
