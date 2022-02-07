@@ -16,10 +16,12 @@ export default class ValidationTestGroup {
       .set("Cookie", MockCookie.notExpiredPatientRealm)
       .expect(200)
       .expect("X-Forwarded-User", MockTokenIntrospection.patientRealm.email ?? "")
-      .expect("X-Auth-Realm", process.env.KEYCLOAK_PATIENT_REALM_NAME??"patients");
+      .expect("X-Auth-Realm", process.env.KEYCLOAK_PATIENT_REALM_NAME ?? "patients");
   }
 
-  @Test("should respond with HTTP status 307 if a session cookie with an expired access_token is submitted")
+  @Test(
+    "should respond with HTTP status 307 if a session cookie with an expired access_token is submitted"
+  )
   private async testExpiredSession() {
     const loginResponse = await request(express)
       .post("/api/auth/login/patients")

@@ -6,10 +6,10 @@ import MockTokenIntrospection from "@tests/__mocks__/TokenIntrospection";
 import MockCookie from "@tests/__mocks__/Cookie";
 
 jest.mock("@/api/Keycloak");
+jest.mock("@tests/__mocks__/Cookie");
 
 @Describe("Validation endpoint for a dotbase user")
 export default class ValidationTestGroup {
-
   @Test("should respond with HTTP status 200 if a valid session cookie is submitted")
   private async testValidSessionCookie() {
     await request(express)
@@ -17,10 +17,12 @@ export default class ValidationTestGroup {
       .set("Cookie", MockCookie.notExpiredDotbaseRealm)
       .expect(200)
       .expect("X-Forwarded-User", MockTokenIntrospection.dotbaseRealm.email ?? "")
-      .expect("X-Auth-Realm", process.env.KEYCLOAK_DOTBASE_REALM_NAME??"dotbase");
+      .expect("X-Auth-Realm", process.env.KEYCLOAK_DOTBASE_REALM_NAME ?? "dotbase");
   }
 
-  @Test("should respond with HTTP status 307 if a session cookie with an expired access_token is submitted")
+  @Test(
+    "should respond with HTTP status 307 if a session cookie with an expired access_token is submitted"
+  )
   private async testExpiredSession() {
     const loginResponse = await request(express)
       .post("/api/auth/login/dotbase")
