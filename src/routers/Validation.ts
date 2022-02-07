@@ -12,12 +12,12 @@ router.use("/", async (req, res) => {
     const isExpired = await CookieService.validateCookieExpiration(req.cookies.session);
 
     if (isExpired) {
-      if (!req.headers.location) throw new Error("Request is missing a location header.");
+      if (!req.headers["x-forwarded-uri"]) throw new Error("Request is missing a x-forwarded-uri header.");
 
       const sessionCookie = await CookieService.renewSessionCookie(req.cookies.session);
 
       res.cookie("session", sessionCookie.value, sessionCookie.options);
-      res.setHeader("X-Forwarded-Uri", req.headers.location);
+      res.setHeader("Location", req.headers["x-forwarded-uri"]);
       res.status(307).send();
     }
 

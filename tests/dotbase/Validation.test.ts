@@ -35,10 +35,10 @@ export default class ValidationTestGroup {
     await request(express)
       .get("/api/auth/validate")
       .set("Cookie", cookie)
-      .set("Location", redirectUri)
+      .set("x-forwarded-uri", redirectUri)
       .expect(307)
       .expect("set-cookie", /.*session=.*/)
-      .expect("X-Forwarded-Uri", redirectUri);
+      .expect("location", redirectUri);
   }
 
   @Test("should respond with HTTP status 401 if an invalid session cookie is submitted")
