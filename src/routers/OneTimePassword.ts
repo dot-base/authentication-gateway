@@ -1,11 +1,12 @@
 import express from "express";
 import OTPService from "@/services/OneTimePassword";
 import TOTPConfig from "@/types/TOTPConfig";
+import HTTPError from "@/utils/HTTPError";
 const router: express.Router = express.Router();
 
 router.get("/qrcode/:patientId", async (req, res) => {
   try {
-    if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
+    if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 400);
 
     const qrCode = await OTPService.getQrCode(req.cookies.session, req.params.patientId);
 
@@ -13,16 +14,16 @@ router.get("/qrcode/:patientId", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    res.status(401).send(e.message);
+    res.status(500).send(e.message);
     return;
   }
 });
 
 router.post("/device/:patientId", async (req, res) => {
   try {
-    if (!req.body.deviceName) throw new Error("Request body is missing a deviceName.");
-    if (!req.body.secret) throw new Error("Request body is missing a secret.");
-    if (!req.body.initialCode) throw new Error("Request body is missing an initialCode.");
+    if (!req.body.deviceName) throw new HTTPError("Request body is missing a deviceName.", 400);
+    if (!req.body.secret) throw new HTTPError("Request body is missing a secret.", 400);
+    if (!req.body.initialCode) throw new HTTPError("Request body is missing an initialCode.", 400);
 
     const totpConfig: TOTPConfig = {
       deviceName: req.body.deviceName,
@@ -36,8 +37,10 @@ router.post("/device/:patientId", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    res.status(401).send(e.message);
-    return;
+    if(e instanceof HTTPError) 
+      res.status(e.status).send(e.message);
+    else
+      res.status(500).send(e.message);
   }
 });
 

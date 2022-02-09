@@ -2,6 +2,7 @@ import KeycloakApi from "@/api/Keycloak";
 import RealmFactory from "@/models/RealmFactory";
 import CookieService from "@/services/Cookie";
 import TOTPConfig from "@/types/TOTPConfig";
+import HTTPError from "@/utils/HTTPError";
 import JwtUtil from "@/utils/Jwt";
 
 export default class OneTimePassword {
@@ -22,6 +23,6 @@ export default class OneTimePassword {
     const tokenIssuer = JwtUtil.getTokenIssuerRealm(inspectedToken);
 
     const isDotbaseUser = tokenIssuer === process.env.KEYCLOAK_DOTBASE_REALM_NAME;
-    if (!isDotbaseUser) throw new Error("The user is not authorized to setup OTP.");
+    if (!isDotbaseUser) throw new HTTPError("The user is not authorized to setup OTP.", 403);
   }
 }

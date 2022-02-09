@@ -2,12 +2,13 @@ import express from "express";
 import CookieService from "@/services/Cookie";
 import TokenIntrospection from "@/types/TokenIntrospection";
 import JwtUtil from "@/utils/Jwt";
+import HTTPError from "@/utils/HTTPError";
 
 const router: express.Router = express.Router();
 
 router.use("/", async (req, res) => {
   try {
-    if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
+    if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 400);
 
     const isExpired = await CookieService.validateCookieExpiration(req.cookies.session);
 
@@ -40,8 +41,10 @@ router.use("/", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    res.status(401).send(e.message);
-    return;
+    if(e instanceof HTTPError) 
+      res.status(e.status).send(e.message);
+    else
+      res.status(401).send(e.message);
   }
 });
 

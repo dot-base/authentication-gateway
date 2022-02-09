@@ -6,6 +6,7 @@ import RealmConfig from "@/types/RealmConfig";
 import TokenIntrospection from "@/types/TokenIntrospection";
 import Tokens from "@/types/Tokens";
 import UserInfo from "@/types/UserInfo";
+import HTTPError from "@/utils/HTTPError";
 import JwtUtil from "@/utils/Jwt";
 
 export default class CookieService {
@@ -38,7 +39,7 @@ export default class CookieService {
     const realm = RealmFactory.realm(realmName);
 
     const inspectedToken = await KeycloakApi.validate(realm, tokens);
-    if (!inspectedToken.active) throw new Error("Access token is invalid.");
+    if (!inspectedToken.active) throw new HTTPError("Access token is invalid.", 401);
 
     return inspectedToken;
   }
