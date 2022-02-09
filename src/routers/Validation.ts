@@ -20,7 +20,7 @@ router.use("/", async (req, res) => {
       const protocol = req.headers["x-forwarded-proto"];
       const uri = req.headers["x-forwarded-uri"];
       if (typeof host !== "string" || typeof protocol !== "string" || typeof uri !== "string")
-        throw new Error("Forwarded URI is invalid.");
+        throw new HTTPError("Forwarded URI is invalid.", 400);
       res.setHeader("Location", new URL(uri, `${protocol}://${host}`).toString());
 
       res.status(307).send();
