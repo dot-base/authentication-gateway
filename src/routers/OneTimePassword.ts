@@ -8,6 +8,8 @@ router.get("/qrcode/:patientId", async (req, res) => {
   try {
     if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 401);
 
+    if(req.headers["x-auth-realm"] !== process.env.KEYCLOAK_DOTBASE_REALM_NAME) throw new HTTPError("The user is not authorized to setup a OTP", 403);
+
     const qrCode = await OTPService.getQrCode(req.cookies.session, req.params.patientId);
 
     res.status(200).send({ qrCode: qrCode });
