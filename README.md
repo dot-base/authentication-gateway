@@ -45,11 +45,11 @@ Want a authentication gateway of your own? The easiest way is to deploy our dock
 | Variable Name | Default | Example |
 | --- | --- | --- |
 | KEYCLOAK_SERVER_ADDRESS | http://keycloak:8080 | - |
-| KEYCLOAK_DOTBASE_REALM_NAME | - | dotbase |
-| KEYCLOAK_DOTBASE_REALM_CLIENT_ID | - | authentication-gateway |
+| KEYCLOAK_DOTBASE_REALM_NAME | dotbase | - |
+| KEYCLOAK_DOTBASE_REALM_CLIENT_ID | authentication-gateway | - |
 | KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET | - | - |
-| KEYCLOAK_PATIENT_REALM_NAME | - | patients |
-| KEYCLOAK_PATIENT_REALM_CLIENT_ID | - | authentication-gateway |
+| KEYCLOAK_PATIENT_REALM_NAME | patients | - |
+| KEYCLOAK_PATIENT_REALM_CLIENT_ID | authentication-gateway | - |
 | KEYCLOAK_PATIENT_REALM_CLIENT_SECRET | - | - |
 
 ### Encryption
