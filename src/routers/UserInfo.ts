@@ -6,7 +6,7 @@ const router: express.Router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 400);
+    if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 401);
 
     const userinfo = await CookieService.getUserInfo(req.cookies.session);
 

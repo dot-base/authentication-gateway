@@ -46,8 +46,8 @@ export default class OneTimePasswordTestGroup {
       .expect(403);
   }
 
-  @Test("should respond with HTTP status 400 if the session cookie is missing")
+  @Test("should respond with HTTP status 401 if the session cookie is missing")
   private async testQRCodeMissingSessionCookie() {
-    await request(express).get("/api/auth/totp/qrcode/test").expect(400);
+    await request(express).get("/api/auth/totp/qrcode/test").expect(401);
   }
 }

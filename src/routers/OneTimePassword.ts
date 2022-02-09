@@ -6,7 +6,7 @@ const router: express.Router = express.Router();
 
 router.get("/qrcode/:patientId", async (req, res) => {
   try {
-    if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 400);
+    if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 401);
 
     const qrCode = await OTPService.getQrCode(req.cookies.session, req.params.patientId);
 

@@ -30,8 +30,8 @@ export default class UserInfoTestGroup {
       .expect(401);
   }
 
-  @Test("should respond with HTTP status 400 if the session cookie is missing")
+  @Test("should respond with HTTP status 401 if the session cookie is missing")
   private async testUserInfoMissingSessionCookie() {
-    await request(express).get("/api/auth/userinfo").expect(400);
+    await request(express).get("/api/auth/userinfo").expect(401);
   }
 }
