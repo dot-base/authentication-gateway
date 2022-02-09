@@ -63,11 +63,14 @@ Used to encrypt the token cookie before sending it to the client
 
 This project is written in Typescript. For an introduction into the language and best practices see the [typescript documentation](https://www.typescriptlang.org/docs/home.html).
 
-### Requirements
+
+### Running Locally
+
+#### Requirements
 - [Node.js >= v16](https://nodejs.org/en/)
 - A local copy of this repository
 
-### Running Locally
+#### Setup
 1. Set up a keycloak instance:
     1. Start a keycloak server
         ```sh
@@ -101,3 +104,21 @@ This project is written in Typescript. For an introduction into the language and
 1. After some startup the server will be available at http://localhost:3000.
 1. Go and mix up some code 👩‍💻. The server will reload automatically once you save. Remember to keep an eye on the console.
 
+
+### Running in a devcontainer
+
+1. if(editor === 'vscode') install the Remote - Containers VSCode Extension (ms-vscode-remote.remote-containers)
+1. Add the docker.localhost domain to your /etc/hosts (needed for traefik routing)
+    ```sh
+    sudo echo "127.0.0.1 docker.localhost" >> /etc/hosts
+    ```
+1. Start the devcontainer
+    ```sh
+    press: CTRL + SHIFT + P > paste: remote-containers.reopenInContainer > hit: Enter
+    ```
+1. Start the development server
+    ```
+    npm start
+    ```
+1. After some startup the server will be available at http://docker.localhost.
+1. Go and mix up some code 👩‍💻. The server will reload automatically once you save. Remember to keep an eye on the console.
