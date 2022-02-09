@@ -28,23 +28,23 @@ export default class LoginTestGroup {
       .expect(401);
   }
 
-  @Test("should respond with HTTP status 401 if incomplete login credentials are submitted")
+  @Test("should respond with HTTP status 400 if incomplete login credentials are submitted")
   private async testIncompleteLoginCredentials() {
     await request(express)
       .post("/api/auth/login/patients")
       .send({ username: "test" })
       .set("Accept", "application/json")
-      .expect(401);
+      .expect(400);
 
     await request(express)
       .post("/api/auth/login/patients")
       .send({ password: "toast" })
       .set("Accept", "application/json")
-      .expect(401);
+      .expect(400);
   }
 
-  @Test("should respond with HTTP status 401 if login credentials are missing")
+  @Test("should respond with HTTP status 400 if login credentials are missing")
   private async testMissingLoginCredentials() {
-    await request(express).post("/api/auth/login/patients").expect(401);
+    await request(express).post("/api/auth/login/patients").expect(400);
   }
 }

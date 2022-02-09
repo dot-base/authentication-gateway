@@ -2,6 +2,7 @@ import CryptoJS from "crypto-js";
 import Tokens from "@/types/Tokens";
 import RealmFactory from "@/models/RealmFactory";
 import RealmConfig from "@/types/RealmConfig";
+import HTTPError from "@/utils/HTTPError";
 
 export default class CryptoService {
   private static get aesPassphrases(): string[] {
@@ -17,7 +18,7 @@ export default class CryptoService {
       const token = this.decryptToken(sessionCookie, aesPassphrase);
       if (token) return token;
     }
-    throw new Error("Access token is invalid.");
+    throw new HTTPError("Access token is invalid.", 401);
   }
 
   private static decryptToken(sessionCookie: string, aesPassphrase: string): Tokens | undefined {
