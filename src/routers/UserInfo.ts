@@ -8,6 +8,8 @@ router.get("/", async (req, res) => {
   try {
     if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 401);
 
+    if(req.headers["x-auth-realm"] !== process.env.KEYCLOAK_DOTBASE_REALM_NAME) throw new HTTPError("The user is not authorized to request userinfo", 403);
+
     const userinfo = await CookieService.getUserInfo(req.cookies.session);
 
     res.status(200).send(userinfo);
