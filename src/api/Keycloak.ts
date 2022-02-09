@@ -86,7 +86,7 @@ export default abstract class KeycloakApi {
         body: loginParams as unknown as BodyInit,
       }
     );
-    if (!response.ok) throw new HTTPError(`Unable to refresh token. Server responded with HTTP ${response.status}.`, 500);
+    if (!response.ok) throw new HTTPError(`Unable to refresh token. Server responded with HTTP ${response.status}.`, 401);
 
     return response.json();
   }
