@@ -44,7 +44,7 @@ router.use("/", async (req, res) => {
     if(e instanceof HTTPError) 
       res.status(e.status).send(e.message);
     else
-      res.status(401).send(e.message);
+      res.status(500).send(e.message);
   }
 });
 
