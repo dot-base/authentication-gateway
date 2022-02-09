@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+
+  traefik:
+    image: traefik:v2.5
+    networks:
+      - dotbase-services
+    command:
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  authentication-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: node
+    environment:
+      KEYCLOAK_DOTBASE_REALM_CLIENT_SECRET: "dotbase-realm-secret"
+      KEYCLOAK_PATIENT_REALM_CLIENT_SECRET: "patient-realm-secret"
+      DOTBASE_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES: "dotbase-encryption-passphrase"
+      PATIENT_REALM_COOKIE_ENCRYPTION_PASSPHRASE_AES: "patient-encryption-passphrase"
+    networks:
+      - dotbase-services
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    labels:
+    - "traefik.http.middlewares.sso.forwardauth.address=http://authentication-gateway:3000/api/auth/validate"
+    - "traefik.http.middlewares.sso.forwardauth.authResponseHeaders=X-Forwarded-User"
+
+    - "traefik.http.routers.authentication-gateway.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/auth`)"
+    - "traefik.http.services.authentication-gateway.loadbalancer.server.port=3000"
+
+  icd-10-api:
+    image: ghcr.io/dot-base/icd-10-api:3.1.0
+    networks:
+      - dotbase-services
+    labels:
+      - "traefik.http.routers.icd-10-api.middlewares=sso"
+      - "traefik.http.routers.icd-10-api.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/icd10`)"
+      - "traefik.http.services.icd-10-api.loadbalancer.server.port=3000"
+
+
+networks:
+  dotbase-services:
