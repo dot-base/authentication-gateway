@@ -24,8 +24,8 @@ export default class LogoutTestGroup {
       .expect("set-cookie", /.*session=;.*/);
   }
 
-  @Test("should respond with HTTP status 401 if session cookie is missing")
+  @Test("should respond with HTTP status 400 if session cookie is missing")
   private async testMissingSessionCookie() {
-    await request(express).post("/api/auth/logout/patients").expect(401);
+    await request(express).post("/api/auth/logout/patients").expect(400);
   }
 }

@@ -10,6 +10,7 @@ import MockUserInfo from "@tests/__mocks__/UserInfo";
 import UserInfo from "@/types/UserInfo";
 import PatientRealm from "@/models/realms/PatientRealm";
 import DotbaseRealm from "@/models/realms/DotbaseRealm";
+import HTTPError from "@/utils/HTTPError";
 
 export default class KeycloakApi {
   public static async login(
@@ -20,13 +21,13 @@ export default class KeycloakApi {
     const invalidCredentials = username !== "test" || password !== "test";
     realm.realmName !== PatientRealm.realmName;
 
-    if (invalidCredentials) throw new Error("Unable to login.");
+    if (invalidCredentials) throw new HTTPError("Unable to login.", 401);
 
     if (realm.realmName === PatientRealm.realmName) return MockTockens.patientRealm;
 
     if (realm.realmName === DotbaseRealm.realmName) return MockTockens.dotbaseRealm;
 
-    throw new Error("Unable to login.");
+    throw new HTTPError("Unable to login.", 401);
   }
 
   public static async logout(realm: RealmConfig, refreshToken: string): Promise<void> {
@@ -34,7 +35,7 @@ export default class KeycloakApi {
       refreshToken !== MockTockens.dotbaseRealm.refresh_token &&
       refreshToken !== MockTockens.patientRealm.refresh_token;
 
-    if (invalidToken) throw new Error("Unable to logout.");
+    if (invalidToken) throw new HTTPError("Unable to logout.", 500);
   }
 
   public static async refresh(realm: RealmConfig, refreshToken: string): Promise<Tokens> {
@@ -42,13 +43,13 @@ export default class KeycloakApi {
       refreshToken !== MockTockens.dotbaseRealm.refresh_token &&
       refreshToken !== MockTockens.patientRealm.refresh_token;
 
-    if (invalidRefreshToken) throw new Error("Unable to refresh token.");
+    if (invalidRefreshToken) throw new HTTPError("Unable to refresh token.", 401);
 
     if (realm.realmName === PatientRealm.realmName) return MockTockens.patientRealm;
 
     if (realm.realmName === DotbaseRealm.realmName) return MockTockens.dotbaseRealm;
 
-    throw new Error("Unable to refresh token.");
+    throw new HTTPError("Unable to refresh token.", 401);
   }
 
   public static async validate(realm: RealmConfig, tokens: Tokens): Promise<TokenIntrospection> {
@@ -57,7 +58,7 @@ export default class KeycloakApi {
       tokens.access_token !== MockTockens.patientRealm.access_token &&
       tokens.access_token !== MockTockens.dotbaseRealmNotExpired.access_token;
 
-    if (invalidTokens) throw new Error("Unable to validate token.");
+    if (invalidTokens) throw new HTTPError("Unable to validate token.", 401);
 
     if (realm.realmName === PatientRealm.realmName) return MockTokenIntrospection.patientRealm;
 
@@ -73,19 +74,19 @@ export default class KeycloakApi {
       tokens.access_token !== MockTockens.dotbaseRealm.access_token &&
       tokens.access_token !== MockTockens.patientRealm.access_token;
 
-    if (invalidTokens) throw new Error("Unable to get userinfo.");
+    if (invalidTokens) throw new HTTPError("Unable to get userinfo.", 500);
 
     if (realm.realmName === PatientRealm.realmName) return MockUserInfo.patientRealm;
 
     if (realm.realmName === DotbaseRealm.realmName) return MockUserInfo.dotbaseRealm;
 
-    throw new Error("Unable to get userinfo.");
+    throw new HTTPError("Unable to get userinfo.", 500);
   }
 
   public static async setupTOTP(realm: RealmConfig, username: string): Promise<string> {
     const isPatientRealm = realm.realmName === PatientRealm.realmName && username === "testpatient";
 
-    if (!isPatientRealm) throw new Error(`Unable to fetch OTP setup from keycloak server.`);
+    if (!isPatientRealm) throw new HTTPError(`Unable to fetch OTP setup from keycloak server.`, 500);
 
     return qrCodeMock;
   }
@@ -102,6 +103,6 @@ export default class KeycloakApi {
       totpConfig.secret === MockTOTPConfig.secret;
 
     if (!matchingConfig || !isPatientRealm)
-      throw new Error(`Unable to register device at keycloak server for OTP setup`);
+      throw new HTTPError(`Unable to register device at keycloak server for OTP setup`, 500);
   }
 }

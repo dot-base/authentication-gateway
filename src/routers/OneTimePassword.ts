@@ -14,8 +14,10 @@ router.get("/qrcode/:patientId", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    res.status(500).send(e.message);
-    return;
+    if(e instanceof HTTPError) 
+      res.status(e.status).send(e.message);
+    else
+      res.status(500).send(e.message);
   }
 });
 
