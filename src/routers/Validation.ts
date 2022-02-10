@@ -2,22 +2,27 @@ import express from "express";
 import CookieService from "@/services/Cookie";
 import TokenIntrospection from "@/types/TokenIntrospection";
 import JwtUtil from "@/utils/Jwt";
+import HTTPError from "@/utils/HTTPError";
 
 const router: express.Router = express.Router();
 
 router.use("/", async (req, res) => {
   try {
-    if (!req.cookies.session) throw new Error("Request is missing a session cookie.");
+    if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 401);
 
     const isExpired = await CookieService.validateCookieExpiration(req.cookies.session);
 
     if (isExpired) {
-      if (!req.headers["x-forwarded-uri"]) throw new Error("Request is missing a x-forwarded-uri header.");
-
       const sessionCookie = await CookieService.renewSessionCookie(req.cookies.session);
-
       res.cookie("session", sessionCookie.value, sessionCookie.options);
-      res.setHeader("Location", req.headers["x-forwarded-uri"]);
+
+      const host = req.headers["x-forwarded-host"];
+      const protocol = req.headers["x-forwarded-proto"];
+      const uri = req.headers["x-forwarded-uri"];
+      if (typeof host !== "string" || typeof protocol !== "string" || typeof uri !== "string")
+        throw new HTTPError("Forwarded URI is invalid.", 400);
+      res.setHeader("Location", new URL(uri, `${protocol}://${host}`).toString());
+
       res.status(307).send();
     }
 
@@ -36,8 +41,10 @@ router.use("/", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    res.status(401).send(e.message);
-    return;
+    if(e instanceof HTTPError) 
+      res.status(e.status).send(e.message);
+    else
+      res.status(500).send(e.message);
   }
 });
 

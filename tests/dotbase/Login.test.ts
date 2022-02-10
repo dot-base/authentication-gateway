@@ -28,28 +28,28 @@ export default class LoginTestGroup {
       .expect(401);
   }
 
-  @Test("should respond with HTTP status 401 if incomplete login credentials are submitted")
+  @Test("should respond with HTTP status 400 if incomplete login credentials are submitted")
   private async testIncompleteLoginCredentials() {
     await request(express)
       .post("/api/auth/login/dotbase")
       .send({ username: "test" })
       .set("Accept", "application/json")
-      .expect(401);
+      .expect(400);
 
     await request(express)
       .post("/api/auth/login/dotbase")
       .send({ password: "toast" })
       .set("Accept", "application/json")
-      .expect(401);
+      .expect(400);
   }
 
-  @Test("should respond with HTTP status 401 if login credentials are missing")
+  @Test("should respond with HTTP status 400 if login credentials are missing")
   private async testMissingLoginCredentials() {
-    await request(express).post("/api/auth/login/dotbase").expect(401);
+    await request(express).post("/api/auth/login/dotbase").expect(400);
   }
 
-  @Test("should respond with HTTP status 401 if realm name is invalid")
+  @Test("should respond with HTTP status 400 if realm name is invalid")
   private async testUnknownRealm() {
-    await request(express).post("/api/auth/login/norealm").expect(401);
+    await request(express).post("/api/auth/login/norealm").expect(400);
   }
 }

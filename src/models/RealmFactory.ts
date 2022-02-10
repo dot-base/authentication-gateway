@@ -1,6 +1,7 @@
 import RealmConfig from "@/types/RealmConfig";
 import PatientRealmModel from "@/models/realms/PatientRealm";
 import DotbaseRealmModel from "@/models/realms/DotbaseRealm";
+import HTTPError from "@/utils/HTTPError";
 
 export default abstract class RealmFactory {
   public static realms = [PatientRealmModel, DotbaseRealmModel];
@@ -12,7 +13,7 @@ export default abstract class RealmFactory {
       case process.env.KEYCLOAK_PATIENT_REALM_NAME:
         return PatientRealmModel;
       default:
-        throw new Error(`Keycloak realm with name ${realmName} is not defined.`);
+        throw new HTTPError(`Keycloak realm with name ${realmName} is not defined.`, 500);
     }
   }
 }

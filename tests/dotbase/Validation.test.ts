@@ -30,22 +30,27 @@ export default class ValidationTestGroup {
       .set("Accept", "application/json");
 
     const cookie = loginResponse.headers["set-cookie"][0];
-    const redirectUri = "http://movebase.charite.de/anywhere";
+    const redirectProtocol = "http";
+    const redirectHost = "dotbase.example.org";
+    const redirectPath = "/anywhere";
+    const redirectUri = `${redirectProtocol}://${redirectHost}${redirectPath}`;
 
     await request(express)
       .get("/api/auth/validate")
       .set("Cookie", cookie)
-      .set("x-forwarded-uri", redirectUri)
+      .set("x-forwarded-proto", redirectProtocol)
+      .set("x-forwarded-host", redirectHost)
+      .set("x-forwarded-uri", redirectPath)
       .expect(307)
       .expect("set-cookie", /.*session=.*/)
       .expect("location", redirectUri);
   }
 
-  @Test("should respond with HTTP status 401 if an invalid session cookie is submitted")
+  @Test("should respond with HTTP status 401 if a session cookie is submitted which does not include a valid token")
   private async testInvalidSessionCookie() {
     await request(express)
       .get("/api/auth/validate")
-      .set("Cookie", "some-invalid-cookie-value")
+      .set("Cookie", "session=some-invalid-cookie-value")
       .expect(401);
   }
 
