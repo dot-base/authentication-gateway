@@ -9,11 +9,8 @@ RUN npm install && \
     mv ./package.json ./builder/package.json
 
 FROM node:16-alpine
-WORKDIR /home/runner/project
+WORKDIR /home/node/project
 COPY --from=builder /usr/src/node-builder/builder .
-RUN addgroup -S runner && \
-    adduser -S runner -G runner -s /bin/false && \
-    chown -R runner:runner /home/runner
-USER runner
 RUN npm install --production
 CMD npm run production
+USER node
