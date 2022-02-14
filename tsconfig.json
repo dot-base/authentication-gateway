@@ -1,26 +1,16 @@
 {
+  "extends": "./tsconfig.production.json",
   "compilerOptions": {
-    "outDir": "./build",
-    "esModuleInterop": true,
-    "strict": true,
-    "module": "commonjs",
-    "target": "es6",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": ["src/*", "build/*"],
-      "@tests/*": ["tests/*"]
-    }
+      "@tests/*": ["tests/*"],
+    },
   },
   "include": ["src/**/*.ts", "tests/**/*.ts", "tests/setEnvVars.js"],
   "exclude": ["node_modules"],
   "ts-node": {
-    "files": true
+    "files": true,
+    "compiler": "ttypescript",
   },
 }

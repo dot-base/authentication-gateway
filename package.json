@@ -13,9 +13,8 @@
     "lint-without-fix": "eslint 'src/**' 'tests/**' --ext .ts",
     "test": "jest --passWithNoTests",
     "prettier": "prettier --write 'src/**/*' 'tests/**/*'",
-    "development": "NODE_ENV=development node --inspect=9229 -r tsconfig-paths/register -r ts-node/register src/server.ts",
-    "build": "tsc",
-    "production": "node -r tsconfig-paths/register build/server.js"
+    "development": "NODE_ENV=development ts-node src/server.ts",
+    "build": "ttsc --project tsconfig.production.json"
   },
   "dependencies": {
     "@sentry/node": "^5.29.0",
@@ -25,7 +24,6 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.5",
-    "tsconfig-paths": "^3.9.0",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
@@ -49,7 +47,8 @@
     "supertest": "^6.1.6",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
-    "typescript": "^4.4.4"
+    "ttypescript": "^1.5.13",
+    "typescript-transform-paths": "^3.3.1"
   },
   "eslintConfig": {
     "root": true,
