@@ -1,3 +1,4 @@
+import { Server as HttpServer } from "http";
 import { Express } from "express";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
@@ -65,8 +66,17 @@ export default class Server {
 
     Server.enableSentry(express);
 
-    express.listen(Server.port, () => {
+    const server = express.listen(Server.port, () => {
       console.log(`Server listening on ${Server.port}`);
+    });
+
+    process.on("SIGTERM", () => this.shutdownApiServer(server));
+    process.on("SIGINT", () => this.shutdownApiServer(server));
+  }
+
+  private async shutdownApiServer(server: HttpServer) {
+    server.close(() => {
+      console.log("Server has gracefully shut down");
     });
   }
 }

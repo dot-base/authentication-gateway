@@ -1,16 +1,19 @@
 FROM node:16-alpine AS builder
-WORKDIR /usr/src/node-builder
+WORKDIR /usr/src/app
 COPY . .
 RUN npm install && \
     npm run build && \
-    mkdir ./builder && \
-    mv ./build/src ./builder/build && \
-    mv ./tsconfig.json ./builder/tsconfig.json && \
-    mv ./package.json ./builder/package.json
+    mkdir -p /usr/src/app-build && \
+    mv ./build /usr/src/app-build/build && \
+    mv ./tsconfig.production.json /usr/src/app-build/tsconfig.json && \
+    mv ./package.json /usr/src/app-build/package.json
+WORKDIR /usr/src/app-build
+RUN npm install --production
 
 FROM node:16-alpine
-WORKDIR /home/node/project
-COPY --from=builder /usr/src/node-builder/builder .
-RUN npm install --production
-CMD npm run production
+RUN apk add dumb-init
+ENV NODE_ENV production
+WORKDIR /usr/src/app
+COPY --from=builder --chown=node:node /usr/src/app-build .
 USER node
+CMD ["dumb-init", "node", "-r", "tsconfig-paths/register", "build/server.js"]
