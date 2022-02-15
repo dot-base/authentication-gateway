@@ -46,7 +46,9 @@ export default class ValidationTestGroup {
       .expect("location", redirectUri);
   }
 
-  @Test("should respond with HTTP status 401 if a session cookie is submitted which does not include a valid token")
+  @Test(
+    "should respond with HTTP status 401 if a session cookie is submitted which does not include a valid token"
+  )
   private async testInvalidSessionCookie() {
     await request(express)
       .get("/api/auth/validate")

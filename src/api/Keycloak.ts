@@ -51,7 +51,8 @@ export default abstract class KeycloakApi {
         body: loginParams as unknown as BodyInit,
       }
     );
-    if (!response.ok) throw new HTTPError(`Unable to login. Server responded with HTTP ${response.status}.`, 401);
+    if (!response.ok)
+      throw new HTTPError(`Unable to login. Server responded with HTTP ${response.status}.`, 401);
 
     return response.json();
   }
@@ -69,7 +70,8 @@ export default abstract class KeycloakApi {
         body: logoutParams as unknown as BodyInit,
       }
     );
-    if (!response.ok) throw new HTTPError(`Unable to logout. Server responded with HTTP ${response.status}.`, 500);
+    if (!response.ok)
+      throw new HTTPError(`Unable to logout. Server responded with HTTP ${response.status}.`, 500);
   }
 
   public static async refresh(realm: RealmConfig, refreshToken: string): Promise<Tokens> {
@@ -86,7 +88,11 @@ export default abstract class KeycloakApi {
         body: loginParams as unknown as BodyInit,
       }
     );
-    if (!response.ok) throw new HTTPError(`Unable to refresh token. Server responded with HTTP ${response.status}.`, 401);
+    if (!response.ok)
+      throw new HTTPError(
+        `Unable to refresh token. Server responded with HTTP ${response.status}.`,
+        401
+      );
 
     return response.json();
   }
@@ -104,7 +110,11 @@ export default abstract class KeycloakApi {
         body: loginParams as unknown as BodyInit,
       }
     );
-    if (!response.ok) throw new HTTPError(`Unable to validate token. Server responded with HTTP ${response.status}.`, 401);
+    if (!response.ok)
+      throw new HTTPError(
+        `Unable to validate token. Server responded with HTTP ${response.status}.`,
+        401
+      );
 
     return response.json();
   }
@@ -119,7 +129,11 @@ export default abstract class KeycloakApi {
         },
       }
     );
-    if (!response.ok) throw new HTTPError(`Unable to get userinfo. Server responded with HTTP ${response.status}.`, 500);
+    if (!response.ok)
+      throw new HTTPError(
+        `Unable to get userinfo. Server responded with HTTP ${response.status}.`,
+        500
+      );
 
     return response.json();
   }
@@ -129,7 +143,8 @@ export default abstract class KeycloakApi {
 
     if (!response.ok)
       throw new HTTPError(
-        `Unable to fetch OTP setup from keycloak server. Server responded with HTTP ${response.status}.`, 500
+        `Unable to fetch OTP setup from keycloak server. Server responded with HTTP ${response.status}.`,
+        500
       );
 
     return await response.text();
@@ -150,7 +165,8 @@ export default abstract class KeycloakApi {
 
     if (!response.ok)
       throw new HTTPError(
-        `Unable to register device at keycloak server for OTP setup. Server responded with HTTP ${response.status}.`, 500
+        `Unable to register device at keycloak server for OTP setup. Server responded with HTTP ${response.status}.`,
+        500
       );
   }
 }

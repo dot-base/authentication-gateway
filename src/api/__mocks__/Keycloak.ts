@@ -86,7 +86,8 @@ export default class KeycloakApi {
   public static async setupTOTP(realm: RealmConfig, username: string): Promise<string> {
     const isPatientRealm = realm.realmName === PatientRealm.realmName && username === "testpatient";
 
-    if (!isPatientRealm) throw new HTTPError(`Unable to fetch OTP setup from keycloak server.`, 500);
+    if (!isPatientRealm)
+      throw new HTTPError(`Unable to fetch OTP setup from keycloak server.`, 500);
 
     return qrCodeMock;
   }
