@@ -15,9 +15,6 @@
     "paths": {
       "@/*": ["src/*", "build/*"]
     },
-    "plugins": [
-      { "transform": "typescript-transform-paths" },
-    ],
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/__mocks__"],
