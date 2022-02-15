@@ -14,7 +14,8 @@
     "test": "jest --passWithNoTests",
     "prettier": "prettier --write 'src/**/*' 'tests/**/*'",
     "development": "NODE_ENV=development ts-node src/server.ts",
-    "build": "tsc --project tsconfig.production.json"
+    "build": "tsc --project tsconfig.production.json",
+    "production": "node -r tsconfig-paths/register build/server.js"
   },
   "dependencies": {
     "@sentry/node": "^5.29.0",
