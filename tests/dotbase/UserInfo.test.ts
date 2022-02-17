@@ -18,11 +18,17 @@ export default class UserInfoTestGroup {
 
     const cookie = loginResponse.headers["set-cookie"][0];
 
-    const res = await request(express).get("/api/auth/userinfo").set("x-auth-realm", process.env.KEYCLOAK_DOTBASE_REALM_NAME ?? "dotbase").set("Cookie", cookie).expect(200);
+    const res = await request(express)
+      .get("/api/auth/userinfo")
+      .set("x-auth-realm", process.env.KEYCLOAK_DOTBASE_REALM_NAME ?? "dotbase")
+      .set("Cookie", cookie)
+      .expect(200);
     expect(res.body).toHaveProperty("preferred_username");
   }
 
-  @Test("should respond with HTTP status 401 if a session cookie is submitted which does not include a valid token")
+  @Test(
+    "should respond with HTTP status 401 if a session cookie is submitted which does not include a valid token"
+  )
   private async testUserInfoInvalidSessionCookie() {
     await request(express)
       .get("/api/auth/userinfo")
