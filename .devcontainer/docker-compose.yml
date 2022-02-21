@@ -29,11 +29,11 @@ services:
       - ..:/workspace:cached
     command: sleep infinity
     labels:
-    - "traefik.http.middlewares.sso.forwardauth.address=http://authentication-gateway:3000/api/auth/validate"
-    - "traefik.http.middlewares.sso.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.middlewares.sso.forwardauth.address=http://authentication-gateway:3000/api/auth/validate"
+      - "traefik.http.middlewares.sso.forwardauth.authResponseHeaders=X-Forwarded-User"
 
-    - "traefik.http.routers.authentication-gateway.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/auth`)"
-    - "traefik.http.services.authentication-gateway.loadbalancer.server.port=3000"
+      - "traefik.http.routers.authentication-gateway.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/auth`)"
+      - "traefik.http.services.authentication-gateway.loadbalancer.server.port=3000"
 
   icd-10-api:
     image: ghcr.io/dot-base/icd-10-api:3.1.0
@@ -43,7 +43,6 @@ services:
       - "traefik.http.routers.icd-10-api.middlewares=sso"
       - "traefik.http.routers.icd-10-api.rule=Host(`${HOSTNAME}`) && PathPrefix(`/api/icd10`)"
       - "traefik.http.services.icd-10-api.loadbalancer.server.port=3000"
-
 
 networks:
   dotbase-services:

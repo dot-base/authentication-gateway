@@ -8,7 +8,8 @@ router.get("/qrcode/:patientId", async (req, res) => {
   try {
     if (!req.cookies.session) throw new HTTPError("Request is missing a session cookie.", 401);
 
-    if(req.headers["x-auth-realm"] !== process.env.KEYCLOAK_DOTBASE_REALM_NAME) throw new HTTPError("The user is not authorized to setup a OTP", 403);
+    if (req.headers["x-auth-realm"] !== process.env.KEYCLOAK_DOTBASE_REALM_NAME)
+      throw new HTTPError("The user is not authorized to setup a OTP", 403);
 
     const qrCode = await OTPService.getQrCode(req.cookies.session, req.params.patientId);
 
@@ -16,10 +17,8 @@ router.get("/qrcode/:patientId", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    if(e instanceof HTTPError) 
-      res.status(e.status).send(e.message);
-    else
-      res.status(500).send(e.message);
+    if (e instanceof HTTPError) res.status(e.status).send(e.message);
+    else res.status(500).send(e.message);
   }
 });
 
@@ -41,10 +40,8 @@ router.post("/device/:patientId", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    if(e instanceof HTTPError) 
-      res.status(e.status).send(e.message);
-    else
-      res.status(500).send(e.message);
+    if (e instanceof HTTPError) res.status(e.status).send(e.message);
+    else res.status(500).send(e.message);
   }
 });
 

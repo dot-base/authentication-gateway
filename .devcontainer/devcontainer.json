@@ -5,4 +5,4 @@
     "dockerComposeFile": ["docker-compose.yml"],
     "service": "authentication-gateway",
     "workspaceFolder": "/workspace",
-  }
+}

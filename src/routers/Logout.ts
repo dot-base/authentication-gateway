@@ -16,10 +16,8 @@ router.post("/:realmName", async (req, res) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    if(e instanceof HTTPError) 
-      res.status(e.status).send(e.message);
-    else
-      res.status(500).send(e.message);
+    if (e instanceof HTTPError) res.status(e.status).send(e.message);
+    else res.status(500).send(e.message);
   }
 });
 

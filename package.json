@@ -9,12 +9,12 @@
   "scripts": {
     "start": "nodemon --watch 'src/**/*' -e ts --exec 'npm run watch'",
     "watch": "npm run lint && npm run prettier && npm run development",
-    "lint": "eslint 'src/**' 'tests/**' --ext .ts --fix",
-    "lint-without-fix": "eslint 'src/**' 'tests/**' --ext .ts",
+    "lint": "eslint 'src/**/*.ts' 'tests/**/*.ts' --fix",
+    "lint-without-fix": "eslint 'src/**/*.ts' 'tests/**/*.ts'",
     "test": "jest --passWithNoTests",
-    "prettier": "prettier --write 'src/**/*' 'tests/**/*'",
-    "development": "NODE_ENV=development node --inspect=9229 -r tsconfig-paths/register -r ts-node/register src/server.ts",
-    "build": "tsc",
+    "prettier": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'",
+    "development": "NODE_ENV=development ts-node src/server.ts",
+    "build": "tsc --project tsconfig.production.json",
     "production": "node -r tsconfig-paths/register build/server.js"
   },
   "dependencies": {
