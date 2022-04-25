@@ -32,10 +32,7 @@ export default abstract class KeycloakApi {
   }
 
   public static get baseUrl(): string {
-    const hostname =
-      process.env.NODE_ENV === "development" ? "http://127.0.0.1:8080" : this.serverAddress;
-
-    return new URL(`/auth/realms`, hostname).toString();
+    return new URL(`/auth/realms`, this.serverAddress).toString();
   }
 
   public static async login(
