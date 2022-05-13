@@ -1,34 +1,10 @@
 import { Server as HttpServer } from "http";
-import { Express } from "express";
-import * as Sentry from "@sentry/node";
-import * as Tracing from "@sentry/tracing";
 
 import express from "@/express";
 
 export default class Server {
   private static get port(): string {
     return process.env.PORT || "3000";
-  }
-
-  private static get sentryIsEnabled(): boolean {
-    return !!process.env.SENTRY_DSN && !!process.env.SENTRY_ENVIRONMENT;
-  }
-
-  private static enableSentry(app: Express) {
-    if (!Server.sentryIsEnabled) return;
-    Sentry.init({
-      dsn: process.env.SENTRY_DSN,
-      integrations: [
-        new Sentry.Integrations.Http({ tracing: true }),
-        new Tracing.Integrations.Express({ app }),
-      ],
-      tracesSampleRate: 1.0,
-      environment: process.env.SENTRY_ENVIRONMENT,
-    });
-
-    app.use(Sentry.Handlers.requestHandler());
-    app.use(Sentry.Handlers.tracingHandler());
-    app.use(Sentry.Handlers.errorHandler());
   }
 
   private static setDefaultEnvironmentVariables() {
@@ -63,8 +39,6 @@ export default class Server {
   private async startApiServer() {
     Server.setDefaultEnvironmentVariables();
     Server.validateEnvironmentVariables();
-
-    Server.enableSentry(express);
 
     const server = express.listen(Server.port, () => {
       console.log(`Server listening on ${Server.port}`);

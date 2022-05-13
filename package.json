@@ -20,8 +20,6 @@
     "production": "node -r tsconfig-paths/register build/server.js"
   },
   "dependencies": {
-    "@sentry/node": "^5.29.0",
-    "@sentry/tracing": "^5.29.0",
     "cookie-parser": "^1.4.5",
     "crypto-js": "^4.1.1",
     "express": "^4.17.1",
